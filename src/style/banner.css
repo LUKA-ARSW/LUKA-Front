@@ -1,0 +1,9 @@
+.banner{
+    background-color: #FD9352;
+    width: auto;
+
+    & .banner-logo{
+        width: 6em;
+        height: 6em;
+    }
+}
