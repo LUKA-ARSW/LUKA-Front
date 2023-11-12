@@ -1,10 +1,11 @@
 
 import PaginaPrincipal from './paginas/PaginaPrincipal';
+import SubastaInfo from './paginas/SubastaInfo';
 
 function App() {
   return (
     <div className="App">
-      <PaginaPrincipal/>
+      <SubastaInfo nombre="Subasta01"/>
 
     </div>
   );
