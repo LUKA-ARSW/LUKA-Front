@@ -10,7 +10,6 @@ export default function Menu() {
                     <li className="menu-li"><a href="#">Catálogo de productos</a></li>
                     <li className="menu-li"><a href="#">Subastas</a></li>
                     <li className="menu-li"><a href="#">Mis subastas</a></li>
-                    <li className="menu-li"><a href="#">Perfil</a></li>
                 </ul>
             </nav>
         </div>

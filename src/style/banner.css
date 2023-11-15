@@ -3,7 +3,28 @@
     width: auto;
 
     & .banner-logo{
-        width: 6em;
-        height: 6em;
+        width: 5em;
+        height: 5em;
+    }
+
+    .banner-usuario{
+        display: flex;
+        justify-content: flex-end;
+
+
+        & .banner-logoUsuario{
+            width: 2.5em;
+            height: 2.5em;
+            position: absolute;
+            top: 1.5em;
+            right: 11em;
+        }
+
+        & .banner-nombreUsuario{
+            font-size: 1.2em;
+            position: absolute;
+            top: 1.7em;
+            right: 3em;
+        }
     }
 }
