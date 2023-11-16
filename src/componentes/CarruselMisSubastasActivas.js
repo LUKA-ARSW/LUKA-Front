@@ -1,6 +1,7 @@
 import React from "react";
+import SubastaInfo from "../paginas/SubastaInfo";
 
-export default function Carrusel(props) {
+export default function CarruselMisSubastasActivas(props) {
     const items = props.items;
 
     const [currentSlide, setCurrentSlide] = React.useState(0);
@@ -29,7 +30,7 @@ export default function Carrusel(props) {
                 <p>Termina el: {item.FechaFin}</p>
 
                 <button type="button">Consultar</button>
-                <button type="button">Inscribirme</button>
+                <button type="button">Ingresar</button>
             </div>
           ))}
         </div>
