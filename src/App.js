@@ -4,7 +4,7 @@ import Menu from './componentes/Menu';
 import MisSubastas from './paginas/MisSubastas';
 import PaginaPrincipal from './paginas/PaginaPrincipal';
 import Producto from './paginas/Producto';
-import Subastas from './paginas/Subastas';
+import Usuario from './paginas/Usuario';
 
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
     <div className="App">
       <Banner/>
       <Menu/>
-      <MisSubastas/>
+      <Usuario/>
     </div>
   );
 }
