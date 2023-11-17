@@ -1,5 +1,5 @@
 import React from "react";
-import SubastaInfo from "../paginas/SubastaInfo";
+
 
 export default function CarruselMisSubastasActivas(props) {
     const items = props.items;
