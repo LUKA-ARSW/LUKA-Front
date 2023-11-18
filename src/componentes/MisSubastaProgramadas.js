@@ -1,13 +1,12 @@
 import React from "react";
 
-import MenuEstadoSubasta from "../componentes/MenuEstadoSubasta";
-import SeccionMisSubastasProgramadas from "../componentes/SeccionMisSubastasProgramadas";
+
+import SeccionMisSubastasProgramadas from "./SeccionMisSubastasProgramadas";
 
 
 export default function MisSubastasProgramadas() {
     return (
       <React.Fragment>
-        <MenuEstadoSubasta/>
         <div className="misSubastas">
             <SeccionMisSubastasProgramadas titulo ="Subastas de larga duración"/>
             <SeccionMisSubastasProgramadas titulo ="Subastas en tiempo real"/>
