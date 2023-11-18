@@ -9,7 +9,7 @@ const categoria = [
     "COLECCIONABLES"
 ];
 
-export default function Producto() {
+export default function AgregarProducto() {
     return (
       <React.Fragment>
         <h1>Producto</h1>
