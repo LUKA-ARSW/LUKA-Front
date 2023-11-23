@@ -1,9 +1,11 @@
 import React from "react";
+import SeccionMisSubastasActivas from "./SeccionMisSubastasActivas";
 
 export default function MisSubastasActivas() {
     return(
-        <React.Fragment>
-            <h1>Mis Subastas Activas</h1>
-        </React.Fragment>
+        <div className="misSubastas">
+            <SeccionMisSubastasActivas titulo ="Subastas de larga duración"/>
+            <SeccionMisSubastasActivas titulo ="Subastas en tiempo real"/>
+        </div>
     );
 };
