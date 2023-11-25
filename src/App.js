@@ -20,8 +20,8 @@ function App() {
         <Route path="/mis-subastas" element={<MisSubastas/>}/>
         <Route path="/subastas" element={<Subastas/>}/>
         <Route path="/catalogo" element={<CatalogoProductos/>}/>
-        <Route path="/subastas/larga-duracion/:idSubasta" element={<SubastaLarga/>}/>
-        <Route path="/subastas/corta-duracion/:idSubasta" element={<SubastaCorta/>}/>
+        <Route path="/subastas/larga-duracion/:idSala" element={<SubastaLarga/>}/>
+        <Route path="/subastas/corta-duracion/:idSala" element={<SubastaCorta/>}/>
         <Route path="/agregar-subasta" element={<AgregarSubasta/>}/>
         <Route path="/agregar-producto" element={<AgregarProducto/>}/>
         <Route path="/login" element={<Login/>}/>
