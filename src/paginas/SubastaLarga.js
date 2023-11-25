@@ -9,8 +9,24 @@ export default function SubastaLarga() {
     const [loading, setLoading] = React.useState(true);
     const {idSala} = useParams();
 
+    const verificarSala = (resultadoConsulta)=>{
+        const elementosSubastaActuales = resultadoConsulta.elementoSubasta.map((elementoSubasta)=>elementoSubasta.producto.idProducto);
+        const conjuntoIdProductos = new Set(elementosSubastaActuales);
+        resultadoConsulta.subasta.productos.forEach(producto => {
+            if(!conjuntoIdProductos.has(producto.idProducto)){
+                resultadoConsulta.elementoSubasta.push({
+                    producto:producto,
+                    pujaMaxima:producto.precio,
+                    compradores:[]
+                });
+            }
+        });
+        return resultadoConsulta;
+    }
+
     React.useEffect(()=>{
         salaServicios.consultarSalaPorNombre(idSala)
+                .then((resultadoConsulta)=>verificarSala(resultadoConsulta))
                 .then((resultadoConsulta)=>setSubastaInfo(resultadoConsulta))
                 .then(()=>setLoading(false));
                              

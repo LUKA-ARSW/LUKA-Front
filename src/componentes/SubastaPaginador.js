@@ -7,8 +7,9 @@ import salaServicio from "../servicios/shared/servicioSala.js";
 
 
 export default function SubastaPaginador({numItems, elementos, nombreSala}) {
+    const [itemsGenerales, setItemsGenerales] = React.useState(elementos);
     const [paginaActual, setPaginaActual] = React.useState(1);
-    const [elementosFranja, setElementosFranja] = React.useState(elementos.slice(paginaActual-1, paginaActual+numItems-1));
+    const [elementosFranja, setElementosFranja] = React.useState(itemsGenerales.slice(paginaActual-1, paginaActual+numItems-1));
 
     const [mostrarModal, setMostrarModal] = React.useState(false);
     const [modalInfo, setModalInfo] = React.useState({});
@@ -17,27 +18,25 @@ export default function SubastaPaginador({numItems, elementos, nombreSala}) {
 
     const [modalPujarInfo, setModalPujarInfo] = React.useState("");
 
-    
 
     const  llamarProducto = (idProducto)=>{
-        const elementoSubastaInfo = elementosFranja.filter((elementoSubasta)=>elementoSubasta.producto.id===idProducto)[0];
+        const elementoSubastaInfo = elementosFranja.filter((elementoSubasta)=>elementoSubasta.producto.idProducto===idProducto)[0];
         setModalInfo(elementoSubastaInfo.producto);
         setMostrarModal(true);
     };
 
     const  pujar = (idProducto)=>{
         setModalPujarInfo(idProducto);
-        console.log(idProducto);
         setMostrarModalPujar(true);
     };
 
     
 
     const  cambiarPaginaArriba = ()=>{
-        if(Math.ceil(elementos.length/numItems) < paginaActual+1){ return; }
+        if(Math.ceil(itemsGenerales.length/numItems) < paginaActual+1){ return; }
         const paginaSiguiente= paginaActual+1;
         setPaginaActual(paginaSiguiente);
-        setElementosFranja(elementos.slice((paginaSiguiente-1)*numItems, (paginaSiguiente)*numItems));
+        setElementosFranja(itemsGenerales.slice((paginaSiguiente-1)*numItems, (paginaSiguiente)*numItems));
 
     }
 
@@ -45,17 +44,29 @@ export default function SubastaPaginador({numItems, elementos, nombreSala}) {
         if(paginaActual <= 1){ return; }
         const paginaAnterior= paginaActual-1;
         setPaginaActual(paginaAnterior);
-        setElementosFranja(elementos.slice((paginaAnterior-1)*numItems, (paginaAnterior)*numItems));
+        setElementosFranja(itemsGenerales.slice((paginaAnterior-1)*numItems, (paginaAnterior)*numItems));
     }
 
     const realizarPuja = ()=>{
         const puja = document.getElementById("pujar").value;
-        const comprador = "daniela.ladino@gmail.com";
-        console.log(nombreSala, comprador, modalPujarInfo, puja);
-        salaServicio.pujarProducto(nombreSala,comprador,modalPujarInfo,puja)
+        const comprador = {
+            nombre: "Daniela Ladino",
+            correo: "daniela.ladino@gmail.com"
+        };
+        salaServicio.pujarProducto(nombreSala,comprador.correo,modalPujarInfo,puja)
             .then((respuesta)=>console.log(respuesta))
             .then(()=>setMostrarModalPujar(false))
-            .then(()=>setModalPujarInfo(""));
+            .then(()=>setModalPujarInfo(""))
+            .then(()=>{
+                const elementosTemp = [...itemsGenerales];
+                const indice = elementosTemp.findIndex((elemento)=>elemento.producto.idProducto===modalPujarInfo);
+                elementosTemp[indice].pujaMaxima = puja;
+                elementosTemp[indice].compradores.unshift({
+                    first:comprador,
+                    second:puja
+                });
+                setItemsGenerales(elementosTemp);
+            });
     }
 
     return(
