@@ -37,7 +37,7 @@ async function pujarProducto(nombreSala,comprador,idProducto,cantidadAPujar){
         'idProducto':idProducto,
         'cantidadAPujar':cantidadAPujar
     });          
-    const respuesta = await servicioAPI.doPath(endPoint, host, cabeceras,body);
+    const respuesta = await servicioAPI.doPatch(endPoint, host, cabeceras,body);
     return respuesta;
 };
 
