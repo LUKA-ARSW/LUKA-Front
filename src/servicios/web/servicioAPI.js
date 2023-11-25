@@ -53,7 +53,7 @@ async function doDelete(endpoint, host, cabeceras) {
 
 function parsearJson(datos) {
     try {
-        return datos.json();
+        return JSON.parse(datos);
     } catch (error) {
         return datos;
     }
