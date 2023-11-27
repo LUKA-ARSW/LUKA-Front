@@ -26,10 +26,10 @@ export default function CarruselMisSubastasActivas(props) {
               key={index}
               className={`carousel-item ${index === currentSlide ? 'active' : ''}`}
             >
-                <p>Nombre: {item.Nombre}</p>
-                <p>Inicial el: {item.FechaInicio}</p>
-                <p>Termina el: {item.FechaFin}</p>
-                <Link to={`/subastas/${item.Nombre}/info`}>
+                <p>Nombre: {item.nombre}</p>
+                <p>Inicial el: {item.fechaInicio}</p>
+                <p>Termina el: {item.fechaFin}</p>
+                <Link to={`/subastas/${item.nombre}/info`}>
                   <button type="button">Consultar</button>
                 </Link>
                 <button type="button">Ingresar</button>
