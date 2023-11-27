@@ -47,7 +47,7 @@ export default function Usuario(){
     return(
         <React.Fragment>
             <h1>Haz parte de LUKA!</h1>
-            <form action="/usuario" method="post" onSubmit={validarIgualdadContrasena}>
+            <form onSubmit={validarIgualdadContrasena}>
                 <div>
                     <label>Nombre:</label>
                     <input type="text" name="nombre" id="nombre" required></input>

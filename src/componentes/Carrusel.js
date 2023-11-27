@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Carrusel(props) {
     const items = props.items;
@@ -27,8 +28,9 @@ export default function Carrusel(props) {
                 <p>Nombre: {item.Nombre}</p>
                 <p>Inicial el: {item.FechaInicio}</p>
                 <p>Termina el: {item.FechaFin}</p>
-
-                <button type="button">Consultar</button>
+                <Link to={`/subastas/${item.Nombre}/info`}>
+                  <button type="button">Consultar</button>
+                </Link>
                 <button type="button">Inscribirme</button>
             </div>
           ))}

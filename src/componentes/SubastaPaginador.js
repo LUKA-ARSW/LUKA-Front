@@ -2,127 +2,41 @@ import React from "react";
 import SubastaPaginadorElemento from "./SubastaPaginadorElemento";
 import ProductoModal from "./ProductoModal";
 import PujarModal from "./PujarModal";
-
-const informacionProductos = [
-    {
-        producto:{
-            id:"ProLuka01",
-            nombre:"Anillo de esmeralda",
-            foto:"",
-            descripcion: "Anillo lindo",
-            precio: 800,
-            categoria: "JOYAS"    
-
-        },
-        pujaMaxima:1000,
-        compradores:[
-            {
-                nombre:"Luisa",
-            }
-            
-        ] 
-    },
-    {
-        producto:{
-            id:"ProLuka02",
-            nombre:"El sueño",
-            foto:"",
-            descripcion: "Anillo lindo",
-            precio: 900,
-            categoria: "JOYAS"   
-    
-        },
-        pujaMaxima:2500,
-        compradores:[
-            {
-                nombre:"Daniela",
-            }
-            
-        ] 
-    },
-    {
-        producto:{
-            id:"ProLuka03",
-            nombre:"Carro antiguo",
-            foto:"",
-            descripcion: "Anillo lindo",
-            precio: 1000000,
-            categoria: "JOYAS"
-    
-        },
-        pujaMaxima:3000000,
-        compradores:[
-            {
-                nombre:"Daniela",
-            }
-            
-        ] 
-
-    },
-    {
-        producto:{
-            id:"ProLuka04",
-            nombre:"Ropa de peliculas",
-            foto:"",
-            descripcion: "Anillo lindo",
-            precio: 598700,
-            categoria: "JOYAS"
-    
-        },
-        pujaMaxima:598700,
-        compradores:[
-            {
-                nombre:"Fernanda",
-            }
-            
-        ] 
-
-    },
-    {
-        producto:{
-            id:"ProLuka05",
-            nombre:"La primera palabra",
-            foto:"",
-            descripcion: "Anillo lindo",
-            precio: 966,
-            categoria: "JOYAS"
-        },
-        pujaMaxima:100000,
-        compradores:[
-            {
-                nombre:"Eduard",
-            }
-            
-        ] 
-
-    }
-];
+import productoServicio from "../servicios/shared/servicioProducto.js";
+import salaServicio from "../servicios/shared/servicioSala.js";
 
 
-export default function SubastaPaginador({numItems}) {
+export default function SubastaPaginador({numItems, elementos, nombreSala}) {
+    const [itemsGenerales, setItemsGenerales] = React.useState(elementos);
     const [paginaActual, setPaginaActual] = React.useState(1);
-    const [elementosFranja, setElementosFranja] = React.useState(informacionProductos.slice(paginaActual-1, paginaActual+numItems-1));
+    const [elementosFranja, setElementosFranja] = React.useState(itemsGenerales.slice(paginaActual-1, paginaActual+numItems-1));
 
     const [mostrarModal, setMostrarModal] = React.useState(false);
     const [modalInfo, setModalInfo] = React.useState({});
 
     const [mostrarModalPujar, setMostrarModalPujar] = React.useState(false);
 
+    const [modalPujarInfo, setModalPujarInfo] = React.useState("");
+
+
     const  llamarProducto = (idProducto)=>{
-        const elementoSubastaInfo = elementosFranja.filter((elementoSubasta)=>elementoSubasta.producto.id===idProducto)[0];
+        const elementoSubastaInfo = elementosFranja.filter((elementoSubasta)=>elementoSubasta.producto.idProducto===idProducto)[0];
         setModalInfo(elementoSubastaInfo.producto);
         setMostrarModal(true);
     };
 
     const  pujar = (idProducto)=>{
+        setModalPujarInfo(idProducto);
         setMostrarModalPujar(true);
     };
 
+    
+
     const  cambiarPaginaArriba = ()=>{
-        if(Math.ceil(informacionProductos.length/numItems) < paginaActual+1){ return; }
+        if(Math.ceil(itemsGenerales.length/numItems) < paginaActual+1){ return; }
         const paginaSiguiente= paginaActual+1;
         setPaginaActual(paginaSiguiente);
-        setElementosFranja(informacionProductos.slice((paginaSiguiente-1)*numItems, (paginaSiguiente)*numItems));
+        setElementosFranja(itemsGenerales.slice((paginaSiguiente-1)*numItems, (paginaSiguiente)*numItems));
 
     }
 
@@ -130,14 +44,35 @@ export default function SubastaPaginador({numItems}) {
         if(paginaActual <= 1){ return; }
         const paginaAnterior= paginaActual-1;
         setPaginaActual(paginaAnterior);
-        setElementosFranja(informacionProductos.slice((paginaAnterior-1)*numItems, (paginaAnterior)*numItems));
+        setElementosFranja(itemsGenerales.slice((paginaAnterior-1)*numItems, (paginaAnterior)*numItems));
+    }
+
+    const realizarPuja = ()=>{
+        const puja = document.getElementById("pujar").value;
+        const comprador = {
+            nombre: "Daniela Ladino",
+            correo: "daniela.ladino@gmail.com"
+        };
+        salaServicio.pujarProducto(nombreSala,comprador.correo,modalPujarInfo,puja)
+            .then((respuesta)=>console.log(respuesta))
+            .then(()=>setMostrarModalPujar(false))
+            .then(()=>setModalPujarInfo(""))
+            .then(()=>{
+                const elementosTemp = [...itemsGenerales];
+                const indice = elementosTemp.findIndex((elemento)=>elemento.producto.idProducto===modalPujarInfo);
+                elementosTemp[indice].pujaMaxima = puja;
+                elementosTemp[indice].compradores.unshift({
+                    first:comprador,
+                    second:puja
+                });
+                setItemsGenerales(elementosTemp);
+            });
     }
 
     return(
         <React.Fragment>
             <div className="contenidoPaginador">
-                {elementosFranja.map((elementoSubasta)=> {
-                    console.log(elementoSubasta);                
+                {elementosFranja.map((elementoSubasta)=> {             
                     return <SubastaPaginadorElemento elemento={elementoSubasta} accionConsulta={llamarProducto} accionPujar={pujar}/>
                 }
                 )}
@@ -169,8 +104,8 @@ export default function SubastaPaginador({numItems}) {
 
             <PujarModal estado={mostrarModalPujar} cambiarEstado={setMostrarModalPujar}>
                 <h1>¿Cuánto desea pujar?</h1>
-                <input type="text" name="pujar" id="pujar"></input>
-                <button type="button">Pujar</button>
+                <input type="number" name="pujar" id="pujar"></input>
+                <button type="button" onClick={realizarPuja}>Pujar</button>
             </PujarModal>
         </React.Fragment>
 
