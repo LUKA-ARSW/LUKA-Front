@@ -25,6 +25,12 @@ async function consultarSubastaPorNombre(nombreSubasta){
     return respuesta;
 };
 
+async function consultarSubastaPorTipo(tipo){
+    const endPoint = '/subasta/tipo/'+tipo;    
+    const respuesta = await servicioAPI.doGet(endPoint, host, {});
+    return respuesta;
+}
+
 async function agregarProductoASubasta(nombreSubasta,producto){
     const endPoint = '/subasta/'+nombreSubasta+'/producto';
     const body = JSON.stringify(producto);
@@ -67,12 +73,13 @@ async function subastasEnCurso(estado){
 
 export default {crearSubasta,
                 consultarTodasSubastas,
-                consultarSubastaPorNombre, 
+                consultarSubastaPorNombre,
+                consultarSubastaPorTipo,
                 agregarProductoASubasta, 
                 eliminarProductoDeSubasta,
                 eliminarSubasta,
                 modificarFechasSubasta,
-                subastasProgramadas,
+                subastasProgramadas,                
                 subastasEnCurso
 };
 

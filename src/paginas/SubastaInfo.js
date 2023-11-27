@@ -8,8 +8,8 @@ import Menu from "../componentes/Menu";
 
 const subastas = {
     "Subasta01":{
-        FechaInicio:"05-11-2023 14:00",
-        FechaFin:"08-11-2023 14:00",
+        fechaInicio:"05-11-2023 14:00",
+        fechaFin:"08-11-2023 14:00",
         productos:[
             {
                 id:"anillo01",
@@ -30,7 +30,7 @@ export default function SubastaInfo({nombre}) {
   
 
     React.useEffect(()=>{
-        const subastaInfo = subastas[nombre];
+        const subastaInfo = subastas[nombre]??subastas["Subasta01"];
         setSubasta(subastaInfo);
     },[nombre]);
 
@@ -49,8 +49,8 @@ export default function SubastaInfo({nombre}) {
             </div>
             <div className="subastaInfo">
                 <h1>{nombre}</h1>
-                <p>Inicia el: {subasta.FechaInicio}</p>
-                <p>Termina el: {subasta.FechaFin}</p>
+                <p>Inicia el: {subasta.fechaInicio}</p>
+                <p>Termina el: {subasta.fechaFin}</p>
                 <TablaProductos productos={subasta.productos}/>
             </div>
         </React.Fragment>
