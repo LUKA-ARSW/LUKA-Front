@@ -5,6 +5,12 @@ import TablaProductoSubasta from "../componentes/TablaProductoSubasta";
 
 export default function AgregarSubasta() {
 
+    const [tipoS, setTipoSubasta] = React.useState("larga");
+
+    const tipoSubasta = (nuevoTipoSubasta) => {
+        setTipoSubasta(nuevoTipoSubasta);
+    }
+
     const agregarSubasta = (event) => {};
     
     return(
@@ -24,6 +30,15 @@ export default function AgregarSubasta() {
                 <div>
                     <label>Finaliza el:</label>
                     <input type="datetime-local" name="fechaFin" id="fechaFin" required></input>
+                </div>
+
+                <div>
+                    <label>Tipo subasta:</label>
+                    <input type="radio" checked={tipoS === "larga"} value="larga" onChange={()=>tipoSubasta("larga")} required></input>
+                    <label>Larga</label>
+
+                    <input type="radio" checked={tipoS === "corta"}  value="corta" onChange={()=>tipoSubasta("corta")} required></input>
+                    <label>Corta</label>
                 </div>
 
                 <div>
