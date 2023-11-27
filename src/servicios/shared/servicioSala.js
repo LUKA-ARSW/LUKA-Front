@@ -18,6 +18,12 @@ async function consultarSalaPorNombre(nombreSala){
     return respuesta;
 };
 
+async function consultarSubastasPorUsuario(comprador, estado){
+    const endPoint = '/sala/comprador/'+comprador +'?estado='+estado;    
+    const respuesta = await servicioAPI.doGet(endPoint, host, {});
+    return respuesta;
+};
+
 async function agregarUsuariosASala(nombreSala,correoUsuario){
     const endPoint = `/sala/${nombreSala}/${correoUsuario}`; 
     const respuesta = await servicioAPI.doPost(endPoint, host, {});
@@ -59,6 +65,7 @@ async function misSubastasEnCurso(idUsuario){
 
 export default {crearSala,
                 consultarSalaPorNombre,
+                consultarSubastasPorUsuario,
                 agregarUsuariosASala,
                 eliminarUsuarioDeSala,
                 pujarProducto,
