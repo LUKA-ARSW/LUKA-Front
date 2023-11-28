@@ -8,6 +8,7 @@ export default function MisSubastasActivas() {
     const [largas, setLargas] = React.useState([])
     const [loading, setLoading] = React.useState(true);
 
+
     React.useEffect(() => {
         const comprador = {
             nombre: "Daniela Ladino",
@@ -35,8 +36,8 @@ export default function MisSubastasActivas() {
 
     return(
         <div className="misSubastas">
-            <SeccionMisSubastasActivas titulo ="Subastas de larga duración" elementos={largas}/>
-            <SeccionMisSubastasActivas titulo ="Subastas en tiempo real" elementos={cortas}/>
+            <SeccionMisSubastasActivas titulo ="Subastas de larga duración" elementos={largas} tipo={'larga-duracion'}/>
+            <SeccionMisSubastasActivas titulo ="Subastas en tiempo real" elementos={cortas} tipo={'corta-duracion'}/>
         </div>
     );
 };

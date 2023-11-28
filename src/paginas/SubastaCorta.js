@@ -19,11 +19,26 @@ export default function SubastaCorta(){
         setMostrarModal(true);
     };
 
+    const verificarSala = (resultadoConsulta)=>{
+        const elementosSubastaActuales = resultadoConsulta.elementoSubasta.map((elementoSubasta)=>elementoSubasta.producto.idProducto);
+        const conjuntoIdProductos = new Set(elementosSubastaActuales);
+        resultadoConsulta.subasta.productos.forEach(producto => {
+            if(!conjuntoIdProductos.has(producto.idProducto)){
+                resultadoConsulta.elementoSubasta.push({
+                    producto:producto,
+                    pujaMaxima:producto.precio,
+                    compradores:[]
+                });
+            }
+        });
+        return resultadoConsulta;
+    }
+
     React.useEffect(()=>{
         salaServicios.consultarSalaPorNombre(idSala)
+            .then((resultadoConsulta)=>verificarSala(resultadoConsulta))
             .then((resultadoConsulta)=>setSubastaInfo(resultadoConsulta))
-            .then(()=>setLoading(false))
-            .then(()=>console.log(subastaInfo, idSala));
+            .then(()=>setLoading(false));
     },[]);
 
     if(loading){
@@ -43,11 +58,11 @@ export default function SubastaCorta(){
                 <p>Termina el: {subastaInfo.subasta.fechaFin}</p>
                 <p>Estado:{subastaInfo.subasta.estado}</p>
                 <image></image>
-                <p>{subastaInfo.elementoSubasta[0].producto.nombre}</p>
+                <p>{subastaInfo.elementoSubasta[0]?.producto.nombre}</p>
                 <button type="button" onClick={()=> llamarProducto(subastaInfo.elementoSubasta[0].producto.idProducto)}>Consultar</button>
             </div>
 
-            <MejoresPujas sala={idSala} informacion={subastaInfo.elementoSubasta[0].compradores} producto={subastaInfo.elementoSubasta[0].producto}/>
+            <MejoresPujas sala={idSala} informacion={subastaInfo.elementoSubasta[0]?.compradores} producto={subastaInfo.elementoSubasta[0]?.producto}/>
 
             <ProductoModal estado={mostrarModal} cambiarEstado={setMostrarModal}>
                 <h1>{modalInfo.nombre}</h1>
