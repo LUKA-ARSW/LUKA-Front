@@ -4,7 +4,7 @@ import salaServicios from "../servicios/shared/servicioSala.js";
 
 export default function MejoresPujas({sala, informacion, producto}){
 
-    const [compradoresActuales, setCompradoresActuales] = React.useState(informacion);
+    const [compradoresActuales, setCompradoresActuales] = React.useState(informacion??[]);
 
     const realizarPuja = ()=>{
         const puja = document.getElementById("pujar").value;

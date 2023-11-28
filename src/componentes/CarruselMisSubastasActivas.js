@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-
 
 export default function CarruselMisSubastasActivas(props) {
     const items = props.items;
@@ -32,7 +31,9 @@ export default function CarruselMisSubastasActivas(props) {
                 <Link to={`/subastas/${item.nombre}/info`}>
                   <button type="button">Consultar</button>
                 </Link>
-                <button type="button">Ingresar</button>
+                <Link to={`/subastas/${props.tipo}/${item.sala}`}>
+                  <button type="button">Ingresar</button>
+                </Link>                
             </div>
           ))}
         </div>
