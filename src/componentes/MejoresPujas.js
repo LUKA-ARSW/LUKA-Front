@@ -8,9 +8,10 @@ export default function MejoresPujas({sala, informacion, producto}){
 
     const realizarPuja = ()=>{
         const puja = document.getElementById("pujar").value;
+        const infoUsuario = servicioJwt.decryptToken(servicioLocalStorage.getValue("token"));
         const comprador = {
-            nombre: "Daniela Ladino",
-            correo: "daniela.ladino@gmail.com"
+            nombre: infoUsuario.nombre,
+            correo: infoUsuario.correo
         };
         salaServicios.pujarProducto(sala,comprador.correo,producto.idProducto,puja)
             .then((respuesta)=>console.log(respuesta))

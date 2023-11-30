@@ -10,9 +10,10 @@ export default function MisSubastasActivas() {
 
 
     React.useEffect(() => {
+        const infoUsuario = servicioJwt.decryptToken(servicioLocalStorage.getValue("token"));
         const comprador = {
-            nombre: "Daniela Ladino",
-            correo: "daniela.ladino@gmail.com"
+            nombre: infoUsuario.nombre,
+            correo: infoUsuario.correo
         }
         servicioSala.consultarSubastasPorUsuario(comprador.correo, "EN_CURSO")
             .then((subastasDelUsuario)=>[

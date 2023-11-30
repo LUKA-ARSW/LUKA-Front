@@ -4,6 +4,8 @@ import ProductoModal from "./ProductoModal";
 import PujarModal from "./PujarModal";
 import productoServicio from "../servicios/shared/servicioProducto.js";
 import salaServicio from "../servicios/shared/servicioSala.js";
+import servicioJwt from "../servicios/security/servicioJwt.js";
+import servicioLocalStorage from "../servicios/web/servicioLocalStorage.js";
 
 
 export default function SubastaPaginador({numItems, elementos, nombreSala}) {
@@ -49,11 +51,8 @@ export default function SubastaPaginador({numItems, elementos, nombreSala}) {
 
     const realizarPuja = ()=>{
         const puja = document.getElementById("pujar").value;
-        const comprador = {
-            nombre: "Daniela Ladino",
-            correo: "daniela.ladino@gmail.com"
-        };
-        salaServicio.pujarProducto(nombreSala,comprador.correo,modalPujarInfo,puja)
+        const infoUsuario = servicioJwt.decryptToken(servicioLocalStorage.getValue("token"));
+        salaServicio.pujarProducto(nombreSala,infoUsuario.correo,modalPujarInfo,puja)
             .then((respuesta)=>console.log(respuesta))
             .then(()=>setMostrarModalPujar(false))
             .then(()=>setModalPujarInfo(""))

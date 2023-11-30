@@ -1,13 +1,7 @@
 import React from "react";
 
 import BannerSencillo from "../componentes/BannerSencillo";
-
-const tipoDoc = [
-    "CC",
-    "CE",
-    "PASAPORTE"
-];
-
+import tipoDoc from "../util/TipoDocumento";
 
 export default function Usuario(){
 

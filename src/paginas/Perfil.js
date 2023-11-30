@@ -2,37 +2,33 @@ import React from "react";
 
 import Banner from "../componentes/Banner";
 import Menu from "../componentes/Menu";
-
-
-const tipoDoc = [
-    "CC",
-    "CE",
-    "PASAPORTE"
-];
-
-const usuario = {
-    nombre: "Luisa Daniela Bermudez Ladino",
-    nombreUsuario: "Luisa-Daniela",
-    correo: "luisa.daniela@gmail.com",
-    tipoDocumento: "CC",
-    documento: "1234567890",
-    tipoUsuario: "comprador",
-    numeroCuenta: "1234567890"
-};
-
+import tipoDoc from "../util/TipoDocumento";
 
 export default function Perfil(correo){
-    const [nombre, setNombre] = React.useState(usuario.nombre);
-    const [tipoU, setTipoUsuario] = React.useState("comprador");
-    const [numeroCuenta, setNumeroCuenta] = React.useState(usuario.numeroCuenta);
-    const [documento, setDocumento] = React.useState(usuario.documento);
+    const [edicion, setEdicion] = React.useState(false);
+    const [usuario, setUsuario] = React.useState({});
     
+    const perfil = (e) => {};
 
-    const tipoUsuario = (nuevoTipoUsuario) => {
-        setTipoUsuario(nuevoTipoUsuario);
+    const cambiarInfoUsuario = (key, value)=>{
+        setUsuario({
+            ...usuario,
+            [key]: value
+        });
     }
 
-    const perfil = (e) => {};
+    React.useEffect(() => {
+        const infoUsuario = servicioJwt.decryptToken(servicioLocalStorage.getValue("token"));
+        setUsuario ({
+            nombre: infoUsuario.nombre,
+            nombreUsuario: infoUsuario.nombreUsuario,
+            correo: infoUsuario.correo,
+            tipoDocumento: infoUsuario.tipoDocumento,
+            documento: infoUsuario.numDocumento,
+            tipoUsuario: infoUsuario.rol,
+            numeroCuenta: infoUsuario.numeroCuenta
+        });
+    }, []);
 
 
     return(
@@ -45,7 +41,7 @@ export default function Perfil(correo){
                 <div className="info-personal">
                     <div>
                         <label>Nombre:</label>
-                        <input type="text" id="nombre" value={nombre} onChange={(nombre) => setNombre(nombre.target.value)} required></input>
+                        <input type="text" id="nombre" value={usuario.nombre} disabled={edicion} required ></input>
                     </div>
                     <div>
                         <label >Username: {usuario.nombreUsuario}</label>
@@ -58,32 +54,33 @@ export default function Perfil(correo){
                         <select name="tipoDocumento" id="tipoDocumento" required>
                                 <option value="">Seleccione un tipo</option>
                                 {tipoDoc.map((tipoDoc) => (
-                                    <option value={tipoDoc}>{tipoDoc}</option>
+                                    <option key={tipoDoc} value={tipoDoc}>{tipoDoc}</option>
                                 ))}
                         </select>
                     </div>
                     <div>
                         <label>Número de documento:</label>
-                        <input type="text" id="numero-documento" value={documento} onChange={(documento)=> setDocumento(documento.target.value)} required></input>
+                        <input type="text" id="numero-documento" value={usuario.numDocumento} disabled={edicion} required></input>
                     </div>
                     <div>
                         <label>Deseas ser:</label>
-                        <input type="radio" checked={tipoU === "comprador"} value="comprador" onChange={()=>tipoUsuario("comprador")} required></input>
+                        <input type="radio" checked={usuario.tipoUsuario === "comprador"} value="comprador" onChange={()=>cambiarInfoUsuario("tipoUsuario", "comprador")} disabled={edicion} required></input>
                         <label>Comprador</label>
 
-                        <input type="radio" checked={tipoU === "vendedor"}  value="vendedor" onChange={()=>tipoUsuario("vendedor")} required></input>
+                        <input type="radio" checked={usuario.tipoUsuario === "vendedor"}  value="vendedor" onChange={()=>cambiarInfoUsuario("tipoUsuario", "vendedor")} disabled={edicion} required></input>
                         <label>Vendedor</label>
 
-                        <input type="radio" checked={tipoU === "ambos"}  value="ambos" onChange={()=>tipoUsuario("ambos")} required></input>
+                        <input type="radio" checked={usuario.tipoUsuario === "ambos"}  value="ambos" onChange={()=>cambiarInfoUsuario("tipoUsuario", "ambos")} disabled={edicion} required></input>
                         <label>Ambos</label>
                     </div>
                 </div>
                 <h2>Información bancaria</h2>
                 <div className="info-bancaria">
                     <label>Número de cuenta:</label>
-                    <input type="text" id="numero-cuenta" value={numeroCuenta} onChange={(numeroCuenta) => setNumeroCuenta(numeroCuenta.target.value)}></input>
+                    <input type="text" id="numero-cuenta" value={usuario.numeroCuenta} disabled={edicion} required></input>
                 </div>
-                <button type="submit">Guardar</button>
+                <button type="button" onClick={()=>setEdicion(!edicion)}>Editar</button>
+                <button type="submit" disabled={edicion}>Guardar</button>
             </form>
         </React.Fragment>
     );

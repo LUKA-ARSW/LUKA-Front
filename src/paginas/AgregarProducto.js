@@ -1,15 +1,7 @@
 import React from "react";
 import Banner from "../componentes/Banner";
 import Menu from "../componentes/Menu";
-
-const categoria = [
-    "ARTE",
-    "AUTOMOVILES",
-    "JOYAS",
-    "MUEBLES",
-    "ELECTRODOMESTICOS",
-    "COLECCIONABLES"
-];
+import categoria from "../util/Categorias";
 
 export default function AgregarProducto() {
 

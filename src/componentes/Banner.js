@@ -3,12 +3,13 @@ import React from "react";
 import logo from "../img/LogoLUKA.png";
 
 import "../style/banner.css";
-import MenuPerfil from "./MenuPerfil"
-
-const userName = "Luisa-Daniela";
+import MenuPerfil from "./MenuPerfil";
+import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
+import servicioJwt from "../servicios/security/servicioJwt";
 
 export default function Banner() {
 
+    const userName = servicioJwt.decryptToken(servicioLocalStorage.getValue("token")).nombreUsuario;
     const [menuAbierto, setMenuAbierto] = React.useState(false);
 
     const handleClick = () => {
