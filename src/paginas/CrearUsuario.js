@@ -1,12 +1,7 @@
 import React from "react";
 
-
-const tipoDoc = [
-    "CC",
-    "CE",
-    "PASAPORTE"
-];
-
+import BannerSencillo from "../componentes/BannerSencillo";
+import tipoDoc from "../util/TipoDocumento";
 
 export default function Usuario(){
 
@@ -46,6 +41,7 @@ export default function Usuario(){
 
     return(
         <React.Fragment>
+            <BannerSencillo/>
             <h1>Haz parte de LUKA!</h1>
             <form onSubmit={validarIgualdadContrasena}>
                 <div>

@@ -11,6 +11,7 @@ import CrearUsuario from './paginas/CrearUsuario';
 import AgregarSubasta from './paginas/AgregarSubasta';
 import AdaptadorSubastaInfo from './componentes/AdaptadorSubastaInfo';
 import AgregarProducto from './paginas/AgregarProducto';
+import Perfil from './paginas/Perfil';
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/crear-usuario" element={<CrearUsuario/>}/>
         <Route path="/subastas/:idSubasta/info" element ={<AdaptadorSubastaInfo/>}/>
+        <Route path ="/perfil" element={<Perfil/>}/>
+        <Route path ="/cerrar-sesion" element={<Login/>}/>
      </Routes>
     </div>
   );
