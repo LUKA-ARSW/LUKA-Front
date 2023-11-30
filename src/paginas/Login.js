@@ -2,10 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import logo from "../img/LogoLUKA.png";
+import BannerSencillo from "../componentes/BannerSencillo";
 
 export default function Login() {
     return (
         <React.Fragment>
+            <BannerSencillo/>
             <img className="logo" src ={logo} alt="Logo" />
             <div>
                 <label>Correo:</label>

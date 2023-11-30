@@ -47,7 +47,7 @@ export default function AgregarProducto() {
                 <textarea name="descripcion" id="descripcion"></textarea>
             </div>
             <button type="submit">Agregar</button>
-            </form>
+        </form>
       </React.Fragment>
     );
 }
