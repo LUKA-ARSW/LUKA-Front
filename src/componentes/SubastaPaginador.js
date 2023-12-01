@@ -52,7 +52,11 @@ export default function SubastaPaginador({numItems, elementos, nombreSala}) {
     const realizarPuja = ()=>{
         const puja = document.getElementById("pujar").value;
         const infoUsuario = servicioJwt.decryptToken(servicioLocalStorage.getValue("token"));
-        salaServicio.pujarProducto(nombreSala,infoUsuario.correo,modalPujarInfo,puja)
+        const comprador = {
+            nombre: infoUsuario.nombre,
+            correo: infoUsuario.correo
+        };
+        salaServicio.pujarProducto(nombreSala,comprador.correo,modalPujarInfo,puja)
             .then((respuesta)=>console.log(respuesta))
             .then(()=>setMostrarModalPujar(false))
             .then(()=>setModalPujarInfo(""))

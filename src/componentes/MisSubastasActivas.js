@@ -1,6 +1,8 @@
 import React from "react";
 import SeccionMisSubastasActivas from "./SeccionMisSubastasActivas";
 import servicioSala from "../servicios/shared/servicioSala";
+import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
+import servicioJwt from "../servicios/security/servicioJwt";
 
 export default function MisSubastasActivas() {
 

@@ -1,6 +1,8 @@
 import React from "react";
 
 import salaServicios from "../servicios/shared/servicioSala.js";
+import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
+import servicioJwt from "../servicios/security/servicioJwt";
 
 export default function MejoresPujas({sala, informacion, producto}){
 
