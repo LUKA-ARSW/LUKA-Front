@@ -3,15 +3,38 @@ import { Link } from "react-router-dom";
 
 import logo from "../img/LogoLUKA.png";
 import BannerSencillo from "../componentes/BannerSencillo";
+import servicioUsuario from "../servicios/shared/servicioUsuario";
+import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
 
 export default function Login() {
 
-    const login = (e) => {};
+    const login = () => {
+        if (document.getElementById("correo").value === "" || document.getElementById("contrasena").value === "") {
+            alert("Por favor ingrese todos los datos");
+            return;
+        }
+
+        const usuario = {
+            correo: document.getElementById("correo").value,
+            contrasena: document.getElementById("contrasena").value
+        };
+
+        servicioUsuario.login(usuario)
+            .then((respuesta) => {
+                console.log(respuesta);
+            })
+            .then((respuesta) => {
+               servicioLocalStorage.setValue("token", respuesta);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     return (
         <React.Fragment>
             <BannerSencillo/>
-            <form onSubmit={login}>
+            <form>
                 <img className="logo" src ={logo} alt="Logo" />
                 <div>
                     <label>Correo:</label>
@@ -22,7 +45,9 @@ export default function Login() {
                     <input type="password" name="contrasena" id="contrasena" required></input>
                 </div>
                 <div>
-                    <button type="submit"><Link to={"/"}>Login</Link></button>
+                    <Link to={"/"}>
+                        <button type="submit" onClick={login}>Login</button>
+                    </Link>
                 </div>
                 <div>
                     <a href="#">¿Has olvidado la contraseña?</a>
