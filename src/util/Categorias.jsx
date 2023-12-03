@@ -6,3 +6,5 @@ const categoria = [
     "ELECTRODOMESTICOS",
     "COLECCIONABLES"
 ];
+
+export default categoria;

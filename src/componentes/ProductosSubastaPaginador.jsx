@@ -1,6 +1,6 @@
 import React from "react";
 import CatalogoPaginadorElemento from "./CatalogoPaginadorElemento";
-import ProductoModal from "../componentes/ProductoModal";
+import ProductoModal from "./ProductoModal";
 
 export default function ProductosSubastaPaginador({numItems, infoProductos, agregar}) {
 

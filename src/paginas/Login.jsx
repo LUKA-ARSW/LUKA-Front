@@ -8,7 +8,9 @@ import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
 
 export default function Login() {
 
-    const login = () => {
+    const login = (event) => {
+        event.preventDefault();
+        
         if (document.getElementById("correo").value === "" || document.getElementById("contrasena").value === "") {
             alert("Por favor ingrese todos los datos");
             return;
@@ -22,6 +24,7 @@ export default function Login() {
         servicioUsuario.login(usuario)
             .then((respuesta) => {
                 console.log(respuesta);
+                return respuesta;
             })
             .then((respuesta) => {
                servicioLocalStorage.setValue("token", respuesta);
@@ -45,19 +48,17 @@ export default function Login() {
                     <input type="password" name="contrasena" id="contrasena" required></input>
                 </div>
                 <div>
-                    <Link to={"/"}>
                         <button type="submit" onClick={login}>Login</button>
-                    </Link>
-                </div>
-                <div>
-                    <a href="#">¿Has olvidado la contraseña?</a>
-                </div>
-                <div>
-                    <Link to={"/crear-usuario"}>
-                        <button type="button">Crear cuenta</button>
-                    </Link>
                 </div>
             </form>
+            <div>
+                <a href="#">¿Has olvidado la contraseña?</a>
+            </div>
+            <div>
+                <Link to={"/crear-usuario"}>
+                    <button type="button">Crear cuenta</button>
+                </Link>
+            </div>
         </React.Fragment>
     );
 }

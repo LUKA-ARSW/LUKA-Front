@@ -1,5 +1,5 @@
 import React from "react";
-import ProductoModal from "../componentes/ProductoModal";
+import ProductoModal from "./ProductoModal";
 
 const productosMock = {
     "anillo01":{

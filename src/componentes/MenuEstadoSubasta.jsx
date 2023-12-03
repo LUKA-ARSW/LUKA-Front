@@ -1,6 +1,6 @@
 import React from "react";
-import SubastasActivas from "../componentes/SubastasActivas";
-import SubastasProgramadas from "../componentes/SubastasProgramadas";
+import SubastasActivas from "./SubastasActivas";
+import SubastasProgramadas from "./SubastasProgramadas";
 
 
 export default function MenuEstadoSubasta() {

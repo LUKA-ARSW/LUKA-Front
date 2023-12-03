@@ -1,6 +1,6 @@
 import React from "react";
 
-import CatalogoPaginador from "../componentes/CatalogoPaginador";
+import CatalogoPaginador from "./CatalogoPaginador";
 
 export default function Productos() {
     return(

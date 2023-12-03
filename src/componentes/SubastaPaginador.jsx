@@ -2,10 +2,10 @@ import React from "react";
 import SubastaPaginadorElemento from "./SubastaPaginadorElemento";
 import ProductoModal from "./ProductoModal";
 import PujarModal from "./PujarModal";
-import productoServicio from "../servicios/shared/servicioProducto.js";
-import salaServicio from "../servicios/shared/servicioSala.js";
-import servicioJwt from "../servicios/security/servicioJwt.js";
-import servicioLocalStorage from "../servicios/web/servicioLocalStorage.js";
+import productoServicio from "../servicios/shared/servicioProducto";
+import salaServicio from "../servicios/shared/servicioSala";
+import servicioJwt from "../servicios/security/servicioJwt";
+import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
 
 
 export default function SubastaPaginador({numItems, elementos, nombreSala}) {

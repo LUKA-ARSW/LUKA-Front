@@ -1,8 +1,8 @@
 import React from "react";
 
-import SeccionSubasta from "../componentes/SeccionSubasta";
+import SeccionSubasta from "./SeccionSubasta";
 
-import servicioSubasta from "../servicios/shared/servicioSubasta.js";
+import servicioSubasta from "../servicios/shared/servicioSubasta";
 
 export default function Subastas() {
   const[corta, setCorta]= React.useState([]);

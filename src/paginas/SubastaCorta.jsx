@@ -3,7 +3,7 @@ import React from "react";
 import MejoresPujas from "../componentes/MejoresPujas";
 import {useParams} from "react-router-dom";
 import ProductoModal from "../componentes/ProductoModal";
-import salaServicios from "../servicios/shared/servicioSala.js";
+import salaServicios from "../servicios/shared/servicioSala";
 
 export default function SubastaCorta(){
     const [subastaInfo, setSubastaInfo] = React.useState({});

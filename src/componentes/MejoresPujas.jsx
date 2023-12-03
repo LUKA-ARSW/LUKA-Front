@@ -1,6 +1,6 @@
 import React from "react";
 
-import salaServicios from "../servicios/shared/servicioSala.js";
+import salaServicios from "../servicios/shared/servicioSala";
 import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
 import servicioJwt from "../servicios/security/servicioJwt";
 
