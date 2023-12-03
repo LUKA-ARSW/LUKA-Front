@@ -1,10 +1,9 @@
-import Login from '../../paginas/Login';
 import servicioAPI from '../web/servicioAPI';
 
 const host='http://localhost:8080';
 
 const cabeceras= {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
 };
 
 async function crearUsuario(usuario){
