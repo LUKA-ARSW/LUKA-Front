@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import CatalogoPaginador from "../componentes/CatalogoPaginador";
+import CatalogoPaginador from "./CatalogoPaginador";
 
 export default function MisProductos() {
     return(

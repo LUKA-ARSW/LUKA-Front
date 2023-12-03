@@ -4,17 +4,11 @@ import BannerSencillo from "../componentes/BannerSencillo";
 import tipoDoc from "../util/TipoDocumento";
 
 export default function Usuario(){
-
-    const [tipoU, setTipoUsuario] = React.useState("comprador");
-
+    const [usuario, setUsuario] = React.useState({});
     const [contrasena, setContrasena] = React.useState("");
     const [confirmarContrasena, setConfirmarContrasena] = React.useState("");
 
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    const tipoUsuario = (nuevoTipoUsuario) => {
-        setTipoUsuario(nuevoTipoUsuario);
-    }
 
     const validarContrasena = (event) => {
         const contrasena = event.target.value;
@@ -38,6 +32,12 @@ export default function Usuario(){
         return true;
     }
 
+    const cambiarInfoUsuario = (key, value)=>{
+        setUsuario({
+            ...usuario,
+            [key]: value
+        });
+    }
 
     return(
         <React.Fragment>
@@ -61,7 +61,7 @@ export default function Usuario(){
                     <select name="tipoDocumento" id="tipoDocumento" required>
                         <option value="">Seleccione un tipo</option>
                         {tipoDoc.map((tipoDoc) => (
-                            <option value={tipoDoc}>{tipoDoc}</option>
+                            <option key={tipoDoc} value={tipoDoc}>{tipoDoc}</option>
                         ))}
                     </select>
                 </div>
@@ -79,13 +79,13 @@ export default function Usuario(){
                 </div>
                 <div>
                     <label>Deseas ser:</label>
-                    <input type="radio" checked={tipoU === "comprador"} value="comprador" onChange={()=>tipoUsuario("comprador")} required></input>
+                    <input type="radio" checked={usuario.tipoUsuario === "comprador"} value="comprador" onChange={()=>cambiarInfoUsuario("tipoUsuario", "comprador")} required></input>
                     <label>Comprador</label>
 
-                    <input type="radio" checked={tipoU === "vendedor"}  value="vendedor" onChange={()=>tipoUsuario("vendedor")} required></input>
+                    <input type="radio" checked={usuario.tipoUsuario === "vendedor"}  value="vendedor" onChange={()=>cambiarInfoUsuario("tipoUsuario", "vendedor")} required></input>
                     <label>Vendedor</label>
 
-                    <input type="radio" checked={tipoU === "ambos"}  value="ambos" onChange={()=>tipoUsuario("ambos")} required></input>
+                    <input type="radio" checked={usuario.tipoUsuario === "ambos"}  value="ambos" onChange={()=>cambiarInfoUsuario("tipoUsuario", "ambos")} required></input>
                     <label>Ambos</label>
                 </div>
                 

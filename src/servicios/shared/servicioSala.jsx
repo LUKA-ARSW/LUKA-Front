@@ -1,45 +1,51 @@
 import servicioAPI from '../web/servicioAPI';
+import servicioLocalStorage from '../web/servicioLocalStorage';
 
 const host='http://localhost:8080';
 
-const cabeceras= {
+const cabecerasContenido= {
     'Content-Type': 'application/json'
 };
+
+const cabecerasAutorizacion= {
+    'Autorizacion': servicioLocalStorage.getValue("token")
+};
+
 async function crearSala(sala){
     const endPoint = '/sala';
     const body = JSON.stringify(sala);
-    const respuesta = await servicioAPI.doPost(endPoint, host, cabeceras, body);
+    const respuesta = await servicioAPI.doPost(endPoint, host, {...cabecerasContenido, ...cabecerasAutorizacion}, body);
     return respuesta;
 };
 
 async function consultarSalaPorNombre(nombreSala){
     const endPoint = '/sala/'+nombreSala;    
-    const respuesta = await servicioAPI.doGet(endPoint, host, {});
+    const respuesta = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
     return respuesta;
 };
 
 async function consultarSubastasPorUsuario(comprador, estado){
     const endPoint = '/sala/comprador/'+comprador +'?estado='+estado;    
-    const respuesta = await servicioAPI.doGet(endPoint, host, {});
+    const respuesta = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
     return respuesta;
 };
 
 async function consultarSalasPorSubasta(idSubasta){
     const endPoint = '/sala/subasta/'+idSubasta;    
-    const respuesta = await servicioAPI.doGet(endPoint, host, {});
+    const respuesta = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
     return respuesta;
 
 } 
 
 async function agregarUsuariosASala(nombreSala,correoUsuario){
     const endPoint = `/sala/${nombreSala}/${correoUsuario}`; 
-    const respuesta = await servicioAPI.doPost(endPoint, host, {});
+    const respuesta = await servicioAPI.doPost(endPoint, host, cabecerasAutorizacion);
     return respuesta;
 };
 
 async function eliminarUsuarioDeSala(nombreSala,correoUsuario){
     const endPoint = `/sala/${nombreSala}/${correoUsuario}`; 
-    const respuesta = await servicioAPI.doDelete(endPoint, host, {});
+    const respuesta = await servicioAPI.doDelete(endPoint, host, cabecerasAutorizacion);
     return respuesta;
 };
 
@@ -50,7 +56,7 @@ async function pujarProducto(nombreSala,comprador,idProducto,cantidadAPujar){
         'idProducto':idProducto,
         'cantidadAPujar':cantidadAPujar
     });          
-    const respuesta = await servicioAPI.doPatch(endPoint, host, cabeceras,body);
+    const respuesta = await servicioAPI.doPatch(endPoint, host, {...cabecerasContenido, ...cabecerasAutorizacion},body);
     return respuesta;
 };
 

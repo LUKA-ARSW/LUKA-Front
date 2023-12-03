@@ -2,7 +2,7 @@ import React from "react";
 
 import SubastaPaginador from "../componentes/SubastaPaginador";
 import { useParams } from "react-router-dom";
-import salaServicios from "../servicios/shared/servicioSala.js";
+import salaServicios from "../servicios/shared/servicioSala";
 
 export default function SubastaLarga() {
     const [subastaInfo, setSubastaInfo] = React.useState({});

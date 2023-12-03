@@ -1,6 +1,6 @@
 import React from "react";
 
-import Carrusel from "../componentes/Carrusel";
+import Carrusel from "./Carrusel";
 
 export default function SeccionSubasta(props) {
     const titulo = props.titulo; 

@@ -3,6 +3,8 @@ import React from "react";
 import Banner from "../componentes/Banner";
 import Menu from "../componentes/Menu";
 import tipoDoc from "../util/TipoDocumento";
+import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
+import servicioJwt from "../servicios/security/servicioJwt";
 
 export default function Perfil(correo){
     const [edicion, setEdicion] = React.useState(false);
@@ -52,9 +54,8 @@ export default function Perfil(correo){
                     <div>
                         <label>Tipo de documento:</label>
                         <select name="tipoDocumento" id="tipoDocumento" required>
-                                <option value="">Seleccione un tipo</option>
                                 {tipoDoc.map((tipoDoc) => (
-                                    <option key={tipoDoc} value={tipoDoc}>{tipoDoc}</option>
+                                    <option key={tipoDoc} value={tipoDoc} selected={tipoDoc === usuario.tipoDocumento}>{tipoDoc}</option>
                                 ))}
                         </select>
                     </div>
