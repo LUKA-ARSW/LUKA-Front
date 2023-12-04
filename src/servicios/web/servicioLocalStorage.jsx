@@ -14,7 +14,12 @@ function setValue(key, value){
     window.localStorage.setItem(key, cryptedValue);
 };
 
+function removeValue(key){
+    window.localStorage.removeItem(key);
+};
+
 export default {
     getValue,
-    setValue
+    setValue,
+    removeValue
 };
