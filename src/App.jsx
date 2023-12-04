@@ -1,37 +1,44 @@
-import MisSubastas from './paginas/MisSubastas';
-import PaginaPrincipal from './paginas/PaginaPrincipal';
-import { Route, Routes } from 'react-router-dom';
-import Subastas from './paginas/Subastas';
-import CatalogoProductos from './paginas/CatalogoProductos';
-import SubastaLarga from './paginas/SubastaLarga';
-import SubastaCorta from './paginas/SubastaCorta';
-import Login from './paginas/Login';
-import CrearUsuario from './paginas/CrearUsuario';
-import AgregarSubasta from './paginas/AgregarSubasta';
-import AdaptadorSubastaInfo from './componentes/AdaptadorSubastaInfo';
-import AgregarProducto from './paginas/AgregarProducto';
-import Perfil from './paginas/Perfil';
 
-function App() {
+import { Suspense, lazy } from 'react';
+import { useRoutes } from 'react-router-dom';
+
+const MisSubastas = lazy(() => import('./paginas/MisSubastas'));
+const PaginaPrincipal = lazy(() => import('./paginas/PaginaPrincipal'));
+const Subastas = lazy(() => import('./paginas/Subastas'));
+const CatalogoProductos = lazy(() => import('./paginas/CatalogoProductos'));
+const SubastaLarga = lazy(() => import('./paginas/SubastaLarga'));
+const SubastaCorta = lazy(() => import('./paginas/SubastaCorta'));
+const Login = lazy(() => import('./paginas/Login'));
+const CrearUsuario = lazy(() => import('./paginas/CrearUsuario'));
+const AgregarSubasta = lazy(() => import('./paginas/AgregarSubasta'));
+const AdaptadorSubastaInfo = lazy(() => import('./componentes/AdaptadorSubastaInfo'));
+const AgregarProducto = lazy(() => import('./paginas/AgregarProducto'));
+const Perfil = lazy(() => import('./paginas/Perfil'));
+
+export default function App() {
+  
+  const routes = useRoutes([
+    { path: "/", element: <PaginaPrincipal /> },
+    { path: "/mis-subastas", element: <MisSubastas /> },
+    { path: "/subastas", element: <Subastas /> },
+    { path: "/catalogo", element: <CatalogoProductos /> },
+    { path: "/subastas/larga-duracion/:idSala", element: <SubastaLarga /> },
+    { path: "/subastas/corta-duracion/:idSala", element: <SubastaCorta /> },
+    { path: "/agregar-subasta", element: <AgregarSubasta /> },
+    { path: "/agregar-producto", element: <AgregarProducto /> },
+    { path: "/login", element: <Login /> },
+    { path: "/crear-usuario", element: <CrearUsuario /> },
+    { path: "/subastas/:idSubasta/info", element: <AdaptadorSubastaInfo /> },
+    { path: "/perfil", element: <Perfil /> },
+    { path: "/cerrar-sesion", element: <Login /> },
+  ]);
+
   return (
     <div className="App">
-     <Routes>
-        <Route exact path="/" element={<PaginaPrincipal/>}/>        
-        <Route path="/mis-subastas" element={<MisSubastas/>}/>
-        <Route path="/subastas" element={<Subastas/>}/>
-        <Route path="/catalogo" element={<CatalogoProductos/>}/>
-        <Route path="/subastas/larga-duracion/:idSala" element={<SubastaLarga/>}/>
-        <Route path="/subastas/corta-duracion/:idSala" element={<SubastaCorta/>}/>
-        <Route path="/agregar-subasta" element={<AgregarSubasta/>}/>
-        <Route path="/agregar-producto" element={<AgregarProducto/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/crear-usuario" element={<CrearUsuario/>}/>
-        <Route path="/subastas/:idSubasta/info" element ={<AdaptadorSubastaInfo/>}/>
-        <Route path ="/perfil" element={<Perfil/>}/>
-        <Route path ="/cerrar-sesion" element={<Login/>}/>
-     </Routes>
+      <Suspense fallback={<div>Cargando...</div>}>
+        {routes}
+      </Suspense>
+      
     </div>
   );
 }
-
-export default App;
