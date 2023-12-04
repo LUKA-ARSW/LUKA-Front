@@ -7,7 +7,7 @@ import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
 import servicioJwt from "../servicios/security/servicioJwt";
 
 export default function Perfil(correo){
-    const [edicion, setEdicion] = React.useState(false);
+    const [edicion, setEdicion] = React.useState(true);
     const [usuario, setUsuario] = React.useState({});
     
     const perfil = (e) => {};
@@ -53,7 +53,7 @@ export default function Perfil(correo){
                         </div>
                     <div>
                         <label>Tipo de documento:</label>
-                        <select name="tipoDocumento" id="tipoDocumento" required>
+                        <select name="tipoDocumento" id="tipoDocumento" disabled={edicion} required>
                                 {tipoDoc.map((tipoDoc) => (
                                     <option key={tipoDoc} value={tipoDoc} selected={tipoDoc === usuario.tipoDocumento}>{tipoDoc}</option>
                                 ))}
@@ -61,7 +61,7 @@ export default function Perfil(correo){
                     </div>
                     <div>
                         <label>Número de documento:</label>
-                        <input type="text" id="numero-documento" value={usuario.numDocumento} disabled={edicion} required></input>
+                        <input type="text" id="numero-documento" value={usuario.documento} disabled={edicion} required></input>
                     </div>
                     <div>
                         <label>Deseas ser:</label>

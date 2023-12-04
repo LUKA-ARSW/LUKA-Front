@@ -1,12 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import logo from "../img/LogoLUKA.png";
 import BannerSencillo from "../componentes/BannerSencillo";
 import servicioUsuario from "../servicios/shared/servicioUsuario";
 import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
+import servicioAutenticacion from "../servicios/security/servicioAutenticacion";
 
 export default function Login() {
+
+    const navegacion = useNavigate();
 
     const login = (event) => {
         event.preventDefault();
@@ -25,10 +28,22 @@ export default function Login() {
             .then((respuesta) => {
                servicioLocalStorage.setValue("token", respuesta);
             })
+            .then(() => {
+                if (!servicioAutenticacion.usuarioAutenticado()) {
+                    throw new Error("No se pudo autenticar el usuario");
+                }
+                navegacion("/");
+            })
             .catch((error) => {
                 console.log(error);
             });
     };
+
+    useEffect(() => {
+        if (servicioAutenticacion.usuarioAutenticado()) {
+            navegacion("/");
+        }
+    }, []);
 
     return (
         <React.Fragment>
