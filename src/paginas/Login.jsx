@@ -23,10 +23,6 @@ export default function Login() {
 
         servicioUsuario.login(usuario)
             .then((respuesta) => {
-                console.log(respuesta);
-                return respuesta;
-            })
-            .then((respuesta) => {
                servicioLocalStorage.setValue("token", respuesta);
             })
             .catch((error) => {
