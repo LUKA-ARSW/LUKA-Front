@@ -1,6 +1,7 @@
 
 import { Suspense, lazy } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import RutaProtegida from './componentes/RutaProtegida';
 
 const MisSubastas = lazy(() => import('./paginas/MisSubastas'));
 const PaginaPrincipal = lazy(() => import('./paginas/PaginaPrincipal'));
@@ -17,26 +18,40 @@ const Perfil = lazy(() => import('./paginas/Perfil'));
 
 export default function App() {
   
-  const routes = useRoutes([
-    { path: "/", element: <PaginaPrincipal /> },
-    { path: "/mis-subastas", element: <MisSubastas /> },
-    { path: "/subastas", element: <Subastas /> },
-    { path: "/catalogo", element: <CatalogoProductos /> },
-    { path: "/subastas/larga-duracion/:idSala", element: <SubastaLarga /> },
-    { path: "/subastas/corta-duracion/:idSala", element: <SubastaCorta /> },
-    { path: "/agregar-subasta", element: <AgregarSubasta /> },
-    { path: "/agregar-producto", element: <AgregarProducto /> },
-    { path: "/login", element: <Login /> },
-    { path: "/crear-usuario", element: <CrearUsuario /> },
-    { path: "/subastas/:idSubasta/info", element: <AdaptadorSubastaInfo /> },
-    { path: "/perfil", element: <Perfil /> },
-    { path: "/cerrar-sesion", element: <Login /> },
-  ]);
+  const rutasProtegidas = [
+    { path: "/", element: PaginaPrincipal},
+    { path: "/mis-subastas", element: MisSubastas},
+    { path: "/subastas", element: Subastas },
+    { path: "/catalogo", element: CatalogoProductos},
+    { path: "/subastas/larga-duracion/:idSala", element: SubastaLarga },
+    { path: "/subastas/corta-duracion/:idSala", element: SubastaCorta },
+    { path: "/agregar-subasta", element: AgregarSubasta },
+    { path: "/agregar-producto", element: AgregarProducto },
+    { path: "/subastas/:idSubasta/info", element: AdaptadorSubastaInfo},
+    { path: "/perfil", element: Perfil },
+    { path: "/cerrar-sesion", element: Login },
+  ];
+
+  const rutasSencillas = [
+    { path: "/login", element: Login },
+    { path: "/crear-usuario", element: CrearUsuario },
+  ];
+
 
   return (
+
+
     <div className="App">
       <Suspense fallback={<div>Cargando...</div>}>
-        {routes}
+        <Routes>
+          {rutasProtegidas.map(({ path, element }) => (
+            <Route key={path} path={path} element={<RutaProtegida componente={element}/>} />
+          ))}
+
+          {rutasSencillas.map(({ path, element:Componente }) => (
+            <Route key={path} path={path} element={<Componente/>} />
+          ))}
+        </Routes>
       </Suspense>
       
     </div>
