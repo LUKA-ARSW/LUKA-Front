@@ -1,7 +1,8 @@
 import servicioAPI from '../web/servicioAPI';
 import servicioLocalStorage from '../web/servicioLocalStorage';
 
-const host='http://localhost:8080';
+const puerto=13000;
+const host=`http://localhost:${puerto}`;
 
 const cabecerasContenido= {
     'Content-Type': 'application/json'
@@ -62,7 +63,7 @@ async function pujarProducto(nombreSala,comprador,idProducto,cantidadAPujar){
 
 async function misSubastaProgramadas(idUsuario){
     const endPoint = '/sala';
-    const resultadoConsultar = await servicioAPI.doGet(endPoint, host, {});
+    const resultadoConsultar = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
     return resultadoConsultar.filter((sala)=>sala.compradores.includes(idUsuario))
         .filter((salas)=>salas.subasta.estado==='PROGRAMADA')
         .map ((sala)=>sala.subasta);
@@ -70,7 +71,7 @@ async function misSubastaProgramadas(idUsuario){
 
 async function misSubastasEnCurso(idUsuario){
     const endPoint = '/sala';
-    const resultadoConsultar = await servicioAPI.doGet(endPoint, host, {});
+    const resultadoConsultar = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
     return resultadoConsultar.filter((sala)=>sala.compradores.includes(idUsuario))
         .filter((salas)=>salas.subasta.estado==='EN_CURSO')
         .map ((sala)=>sala.subasta);

@@ -1,7 +1,8 @@
 import servicioAPI from '../web/servicioAPI';
 import servicioLocalStorage from '../web/servicioLocalStorage';
 
-const host='http://localhost:8080';
+const puerto = 13000;
+const host =`http://localhost:${puerto}`;
 
 const cabecerasContenido= {
     'Content-Type': 'application/json'
