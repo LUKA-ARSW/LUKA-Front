@@ -2,74 +2,25 @@ import React from "react";
 import CatalogoPaginadorElemento from "./CatalogoPaginadorElemento";
 import ProductoModal from "./ProductoModal";
 
-const informacionProductos = [
-    {
-        id:"ProLuka01",
-        nombre:"Anillo de esmeralda",
-        foto:"",
-        descripcion: "Anillo lindo",
-        precio: 800,
-        categoria: "JOYAS"    
+export default function CatalogoPaginador({numItems, elementos}) {
 
-    }, 
-    {
-        id:"ProLuka02",
-        nombre:"El sueño",
-        foto:"",
-        descripcion: "Anillo lindo",
-        precio: 900,
-        categoria: "JOYAS"   
-
-    },
-
-    {
-        id:"ProLuka03",
-        nombre:"Carro antiguo",
-        foto:"",
-        descripcion: "Anillo lindo",
-        precio: 1000000,
-        categoria: "JOYAS"
-
-    },
-
-    {
-        id:"ProLuka04",
-        nombre:"Ropa de peliculas",
-        foto:"",
-        descripcion: "Anillo lindo",
-        precio: 598700,
-        categoria: "JOYAS"
-
-    },
-
-    {
-        id:"ProLuka05",
-        nombre:"La primera palabra",
-        foto:"",
-        descripcion: "Anillo lindo",
-        precio: 966,
-        categoria: "JOYAS"
-    }
-];
-
-export default function CatalogoPaginador({numItems}) {
     const [paginaActual, setPaginaActual] = React.useState(1);
-    const [elementosFranja, setElementosFranja] = React.useState(informacionProductos.slice(paginaActual-1, paginaActual+numItems-1));
+    const [elementosFranja, setElementosFranja] = React.useState(elementos.slice(paginaActual-1, paginaActual+numItems-1));
 
     const [mostrarModal, setMostrarModal] = React.useState(false);
     const [modalInfo, setModalInfo] = React.useState({});
 
     const  llamarProducto = (idProducto)=>{
-        const productoInfo = elementosFranja.filter((producto)=>producto.id===idProducto)[0];
+        const productoInfo = elementosFranja.filter((producto)=>producto.idProducto===idProducto)[0];
         setModalInfo(productoInfo);
         setMostrarModal(true);
     };
 
     const  cambiarPaginaArriba = ()=>{
-        if(Math.ceil(informacionProductos.length/numItems) < paginaActual+1){ return; }
+        if(Math.ceil(elementos.length/numItems) < paginaActual+1){ return; }
         const paginaSiguiente= paginaActual+1;
         setPaginaActual(paginaSiguiente);
-        setElementosFranja(informacionProductos.slice((paginaSiguiente-1)*numItems, (paginaSiguiente)*numItems));
+        setElementosFranja(elementos.slice((paginaSiguiente-1)*numItems, (paginaSiguiente)*numItems));
 
     }
 
@@ -77,7 +28,7 @@ export default function CatalogoPaginador({numItems}) {
         if(paginaActual <= 1){ return; }
         const paginaAnterior= paginaActual-1;
         setPaginaActual(paginaAnterior);
-        setElementosFranja(informacionProductos.slice((paginaAnterior-1)*numItems, (paginaAnterior)*numItems));
+        setElementosFranja(elementos.slice((paginaAnterior-1)*numItems, (paginaAnterior)*numItems));
     }
 
     return(
