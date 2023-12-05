@@ -44,6 +44,13 @@ async function agregarProductoASubasta(nombreSubasta,producto){
     return respuesta;
 };
 
+async function consultarProductosNoAgregadosSubastas(){
+    const endPoint = '/subasta/productos';    
+    const respuesta = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
+    return respuesta;
+
+}
+
 async function eliminarProductoDeSubasta(nombreSubasta,idProducto,){
     const endPoint = '/subasta/'+nombreSubasta+'/producto/'+idProducto;
     const respuesta = await servicioAPI.doDelete(endPoint, host, cabecerasAutorizacion);
@@ -81,7 +88,8 @@ export default {crearSubasta,
                 consultarTodasSubastas,
                 consultarSubastaPorNombre,
                 consultarSubastaPorTipo,
-                agregarProductoASubasta, 
+                agregarProductoASubasta,
+                consultarProductosNoAgregadosSubastas,
                 eliminarProductoDeSubasta,
                 eliminarSubasta,
                 modificarFechasSubasta,

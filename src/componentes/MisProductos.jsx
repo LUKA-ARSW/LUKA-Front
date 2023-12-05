@@ -3,13 +3,19 @@ import { Link } from "react-router-dom";
 
 import CatalogoPaginador from "./CatalogoPaginador";
 import servicioProducto from "../servicios/shared/servicioProducto";
+import servicioJwt from "../servicios/security/servicioJwt";
+import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
 
 export default function MisProductos() {
     const[productos, setProductos]= React.useState([]);
     const[loading,setLoading]= React.useState(true);
     
     React.useEffect(()=>{
-        Promise.all([servicioProducto.consultarTodosProductos()])
+        const infoUsuario = servicioJwt.decryptToken(servicioLocalStorage.getValue("token"));
+        const vendedor = {
+            correo: infoUsuario.correo
+        };
+        Promise.all([servicioProducto.consultarProductosPorVendedor(vendedor.correo)])
         .then(([productosActuales])=>{
             setProductos(productosActuales);
         })

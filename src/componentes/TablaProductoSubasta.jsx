@@ -4,67 +4,22 @@ import ProductoModal from "./ProductoModal";
 import CatalogoPaginador from "./CatalogoPaginador";
 import ProductosSubastaPaginador from "./ProductosSubastaPaginador";
 
-const productosMock = [
-    {
-        id:"ProLuka01",
-        nombre:"Anillo de esmeralda",
-        foto:"",
-        descripcion: "Anillo lindo",
-        precio: 800,
-        categoria: "JOYAS"    
 
-    }, 
-    {
-        id:"ProLuka02",
-        nombre:"El sueño",
-        foto:"",
-        descripcion: "Anillo lindo",
-        precio: 900,
-        categoria: "JOYAS"   
-
-    },
-
-    {
-        id:"ProLuka03",
-        nombre:"Carro antiguo",
-        foto:"",
-        descripcion: "Anillo lindo",
-        precio: 1000000,
-        categoria: "JOYAS"
-
-    },
-
-    {
-        id:"ProLuka04",
-        nombre:"Ropa de peliculas",
-        foto:"",
-        descripcion: "Anillo lindo",
-        precio: 598700,
-        categoria: "JOYAS"
-
-    },
-
-    {
-        id:"ProLuka05",
-        nombre:"La primera palabra",
-        foto:"",
-        descripcion: "Anillo lindo",
-        precio: 966,
-        categoria: "JOYAS"
-    }
-];
-
-export default function TablaProductoSubasta(){
+export default function TablaProductoSubasta({elemento}){
 
     const [mostrarModal, setMostrarModal] = React.useState(false);
     const [productos, setProductos] = React.useState([]);
-    const [productosInfo, setProductosInfo] = React.useState(productosMock);
+    const [productosInfo, setProductosInfo] = React.useState(elemento);
     const [productosFiltrados, setProductosFiltrados] = React.useState(productosInfo);
 
     const filtroRef = React.useRef();
 
-    const agregarProducto = (producto)=>{
-        setProductos([...productos, producto]);
+    const agregarProducto = (productoParaAgregar)=>{
+        const productosRestante = productosInfo.filter(producto => producto.idProducto!==productoParaAgregar.idProducto && !productos.some(productoAgregado => productoAgregado.idProducto === producto.idProducto));
+        setProductos([...productos, productoParaAgregar]);
+        setProductosInfo(productosRestante);
+        setProductosFiltrados(productosRestante);
+      
     };
 
     const ajustarFiltro = ()=>{
@@ -84,7 +39,7 @@ export default function TablaProductoSubasta(){
                     productos.map((producto)=>{
                         return(
                             <li>
-                                {producto.id}
+                                {producto.idProducto}
                                 {producto.nombre}
                             </li>
                         );
@@ -103,7 +58,5 @@ export default function TablaProductoSubasta(){
                 <ProductosSubastaPaginador numItems={2} infoProductos={productosFiltrados} agregar={agregarProducto}/>
             </ProductoModal>
         </React.Fragment>
-
-
     );
 };

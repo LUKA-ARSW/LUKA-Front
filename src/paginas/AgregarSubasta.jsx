@@ -2,14 +2,32 @@ import React from "react";
 import Banner from "../componentes/Banner";
 import Menu from "../componentes/Menu";
 import TablaProductoSubasta from "../componentes/TablaProductoSubasta";
+import servicioSubasta from "../servicios/shared/servicioSubasta";
 
 export default function AgregarSubasta() {
 
     const [tipoS, setTipoSubasta] = React.useState("larga");
+    const[productosRevisar, setProductosRevisar]= React.useState([]);
+    const[loading,setLoading]= React.useState(true);
 
     const tipoSubasta = (nuevoTipoSubasta) => {
         setTipoSubasta(nuevoTipoSubasta);
-    }
+    };
+    
+    React.useEffect(()=>{
+        Promise.all([servicioSubasta.consultarProductosNoAgregadosSubastas()])
+        .then(([productosActuales])=>{
+            setProductosRevisar(productosActuales);
+        })
+        .then(()=>setLoading(false));
+    },[]);
+
+    if(loading){
+        return(
+            <React.Fragment>
+                <h1>Cargando...</h1>
+            </React.Fragment>
+        );}
 
     const agregarSubasta = (event) => {};
     
@@ -42,7 +60,7 @@ export default function AgregarSubasta() {
                 </div>
 
                 <div>
-                    <TablaProductoSubasta/>
+                    <TablaProductoSubasta elemento={productosRevisar}/>
                 </div>
                 <div>
                     <button type="submit">Crear</button>
