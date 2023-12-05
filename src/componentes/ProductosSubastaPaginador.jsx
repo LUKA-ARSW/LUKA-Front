@@ -12,7 +12,7 @@ export default function ProductosSubastaPaginador({numItems, infoProductos, agre
     },[infoProductos]);
 
     const buscarProducto = (idProducto)=>{
-        return infoProductos.find((producto)=>producto.id === idProducto);
+        return infoProductos.find((producto)=>producto.idProducto === idProducto);
     }
 
     const  cambiarPaginaArriba = ()=>{
@@ -35,9 +35,9 @@ export default function ProductosSubastaPaginador({numItems, infoProductos, agre
             <div className="contenidoPaginador">
                 {elementosFranja.map((producto)=>
                     <div>
-                        <p>{producto.id}</p>
+                        <p>{producto.idProducto}</p>
                         <p>{producto.nombre}</p>
-                        <button type="button" onClick={()=>agregar(buscarProducto(producto.id))}>Agregar</button>
+                        <button type="button" onClick={()=>agregar(buscarProducto(producto.idProducto))}>Agregar</button>
                     </div>
                 )}
 
