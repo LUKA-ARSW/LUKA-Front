@@ -37,6 +37,12 @@ async function consultarProductoPorNombre(nombreProducto){
     return respuesta;
 };
 
+async function consultarProductosPorVendedor(idVendedor){
+    const endPoint = '/producto/vendedor/'+idVendedor;    
+    const respuesta = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
+    return respuesta;
+}
+
 async function modificarProducto(producto, idProducto){
     const endPoint = '/producto/'+idProducto;
     const body = JSON.stringify(producto);
@@ -52,6 +58,7 @@ async function eliminarProducto(idProducto){
 
 export default {crearProducto,
                 consultarTodosProductos,
+                consultarProductosPorVendedor,
                 consultarProductoPorId,
                 consultarProductoPorNombre,
                 modificarProducto,
