@@ -4,7 +4,7 @@ import SeccionSubasta from "./SeccionSubasta";
 
 import servicioSubasta from "../servicios/shared/servicioSubasta";
 
-export default function Subastas() {
+export default function Subastas({inscribirUsuario}) {
   const[corta, setCorta]= React.useState([]);
   const[larga,setLarga]= React.useState([]);
   const[loading,setLoading]= React.useState(true);
@@ -33,8 +33,8 @@ if(loading){
 
     return (
       <div className="subastas">
-        <SeccionSubasta titulo ="Subastas de larga duración" elementos={larga}/>
-        <SeccionSubasta titulo ="Subastas en tiempo real" elementos={corta}/>
+        <SeccionSubasta titulo ="Subastas de larga duración" elementos={larga} inscribirUsuario={inscribirUsuario}/>
+        <SeccionSubasta titulo ="Subastas en tiempo real" elementos={corta} inscribirUsuario={inscribirUsuario}/>
       </div>
     );
 }
