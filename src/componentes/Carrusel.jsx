@@ -13,6 +13,7 @@ export default function Carrusel(props) {
     const prevSlide = () => {
       setCurrentSlide((currentSlide - 1 + items.length) % items.length);
     };
+
   
     return (
       <div className="carousel-container">
@@ -31,7 +32,7 @@ export default function Carrusel(props) {
                 <Link to={`/subastas/${item.nombre}/info`}>
                   <button type="button">Consultar</button>
                 </Link>
-                <button type="button">Inscribirme</button>
+                <button type="button" onClick={() => props.inscribirUsuario(item)}>Inscribirme</button>
             </div>
           ))}
         </div>
