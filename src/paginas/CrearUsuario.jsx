@@ -2,13 +2,17 @@ import React from "react";
 
 import BannerSencillo from "../componentes/BannerSencillo";
 import tipoDoc from "../util/TipoDocumento";
+import servicioUsuario from "../servicios/shared/servicioUsuario";
+import { error } from "console";
+import { useNavigate } from "react-router";
 
 export default function Usuario(){
     const [usuario, setUsuario] = React.useState({});
     const [contrasena, setContrasena] = React.useState("");
-    const [confirmarContrasena, setConfirmarContrasena] = React.useState("");
+    const [confirmarContrasena, setConfirmarContrasena] = React.useState(false);
+    const navegacion = useNavigate();
 
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const regex = /^[\w#\-_@!]{8,}$/;    
 
     const validarContrasena = (event) => {
         const contrasena = event.target.value;
@@ -20,16 +24,13 @@ export default function Usuario(){
     }
 
     const validarConfirmacionContrasena = (event) => {
-        setConfirmarContrasena(event.target.value);
-    }
-
-    function validarIgualdadContrasena(event){
-        if(contrasena !== confirmarContrasena){
+        const confirmarContrasena = event.target.value;
+        const igualdad=confirmarContrasena===contrasena;
+        setConfirmarContrasena(igualdad);
+        if(igualdad===false){
             alert("Las contraseñas no coinciden");
-            event.preventDefault();
-            return false;
         }
-        return true;
+
     }
 
     const cambiarInfoUsuario = (key, value)=>{
@@ -39,26 +40,46 @@ export default function Usuario(){
         });
     }
 
+    const crearNuevoUsuario = (event) => {
+
+        event.preventDefault();       
+        if(confirmarContrasena){
+            servicioUsuario.crearUsuario({
+                ...usuario, 
+                contrasena: contrasena
+            }).then(respuesta => {
+                alert("Usuario creado con éxito");
+                navegacion("/login");
+
+            }).catch(error => {                
+                setUsuario({});
+                setContrasena("");            
+            });
+        }
+
+        
+    }
+
     return(
         <React.Fragment>
             <BannerSencillo/>
             <h1>Haz parte de LUKA!</h1>
-            <form onSubmit={validarIgualdadContrasena}>
+            <form onSubmit={crearNuevoUsuario}>
                 <div>
                     <label>Nombre:</label>
-                    <input type="text" name="nombre" id="nombre" required></input>
+                    <input type="text" name="nombre" id="nombre"  onChange={(event)=>cambiarInfoUsuario(event.target.id,event.target.value)} required></input>
                 </div>
                 <div>
                     <label>Username:</label>
-                    <input type="text" name="username" id="username" required></input>
+                    <input type="text" name="nombreUsuario" id="nombreUsuario" onChange={(event)=>cambiarInfoUsuario(event.target.id,event.target.value)} required></input>
                 </div>
                 <div>
                     <label>Correo:</label>
-                    <input type="email" name="correo" id="correo" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}" required></input>
+                    <input type="email" name="correo" id="correo" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}" onChange={(event)=>cambiarInfoUsuario(event.target.id,event.target.value)} required></input>
                 </div>
                 <div>
                     <label>Tipo de documento:</label>
-                    <select name="tipoDocumento" id="tipoDocumento" required>
+                    <select name="tipoDocumento" id="tipoDocumento" onChange={(event)=>cambiarInfoUsuario(event.target.id,event.target.value)} required>
                         <option value="">Seleccione un tipo</option>
                         {tipoDoc.map((tipoDoc) => (
                             <option key={tipoDoc} value={tipoDoc}>{tipoDoc}</option>
@@ -67,25 +88,25 @@ export default function Usuario(){
                 </div>
                 <div>
                     <label>Numero de documento:</label>
-                    <input type="text" name="numeroDocumento" id="numeroDocumento" required></input>                    
+                    <input type="text" name="numDocumento" id="numDocumento" onChange={(event)=>cambiarInfoUsuario(event.target.id,event.target.value)} required></input>                    
                 </div>
                 <div>
                     <label>Contraseña:</label>
-                    <input type="password" name="contrasena" id="contrasena" value={contrasena} onChange={validarContrasena} required></input>
+                    <input type="password" name="contrasena" id="contrasena" value={contrasena} onBlur={validarContrasena} onChange={(event)=>setContrasena(event.target.value)} required></input>
                 </div>
                 <div>
                     <label>Confirmar contraseña:</label>
-                    <input type="password" name="confirmarContrasena" id="confirmarContrasena" value={confirmarContrasena} onChange={validarConfirmacionContrasena} required></input>
+                    <input type="password" name="confirmarContrasena" id="confirmarContrasena" onBlur={validarConfirmacionContrasena} required></input>
                 </div>
                 <div>
                     <label>Deseas ser:</label>
-                    <input type="radio" checked={usuario.tipoUsuario === "comprador"} value="comprador" onChange={()=>cambiarInfoUsuario("tipoUsuario", "comprador")} required></input>
+                    <input type="radio" checked={usuario.rol === "COMPRADOR"} value="comprador" onChange={()=>cambiarInfoUsuario("rol", "COMPRADOR")} required></input>
                     <label>Comprador</label>
 
-                    <input type="radio" checked={usuario.tipoUsuario === "vendedor"}  value="vendedor" onChange={()=>cambiarInfoUsuario("tipoUsuario", "vendedor")} required></input>
+                    <input type="radio" checked={usuario.rol === "VENDEDOR"}  value="vendedor" onChange={()=>cambiarInfoUsuario("rol", "VENDEDOR")} required></input>
                     <label>Vendedor</label>
 
-                    <input type="radio" checked={usuario.tipoUsuario === "ambos"}  value="ambos" onChange={()=>cambiarInfoUsuario("tipoUsuario", "ambos")} required></input>
+                    <input type="radio" checked={usuario.rol === "AMBOS"}  value="ambos" onChange={()=>cambiarInfoUsuario("rol", "AMBOS")} required></input>
                     <label>Ambos</label>
                 </div>
                 
