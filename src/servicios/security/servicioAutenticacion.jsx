@@ -9,7 +9,7 @@ const usuarioAutenticado = () =>{
         return infoUsuario!=null;
 
     }catch(error){
-        
+        console.error(error);
         return false;
     }
 
