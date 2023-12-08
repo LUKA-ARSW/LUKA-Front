@@ -5,10 +5,9 @@ import CatalogoPaginador from "./CatalogoPaginador";
 import ProductosSubastaPaginador from "./ProductosSubastaPaginador";
 
 
-export default function TablaProductoSubasta({elemento}){
+export default function TablaProductoSubasta({elemento,productos,agregarProducto: setProductos}){
 
-    const [mostrarModal, setMostrarModal] = React.useState(false);
-    const [productos, setProductos] = React.useState([]);
+    const [mostrarModal, setMostrarModal] = React.useState(false);   
     const [productosInfo, setProductosInfo] = React.useState(elemento);
     const [productosFiltrados, setProductosFiltrados] = React.useState(productosInfo);
 
@@ -38,10 +37,7 @@ export default function TablaProductoSubasta({elemento}){
                 {
                     productos.map((producto)=>{
                         return(
-                            <li>
-                                {producto.idProducto}
-                                {producto.nombre}
-                            </li>
+                            <li>{`${producto.idProducto} ${producto.nombre}`}</li>
                         );
                     })
                 }

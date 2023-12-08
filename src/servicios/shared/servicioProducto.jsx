@@ -20,7 +20,8 @@ async function crearProducto(producto){
 };
 
 async function consultarTodosProductos(){
-    const endPoint = '/producto';    
+    const endPoint = '/producto';   
+    console.log(cabecerasAutorizacion); 
     const respuesta = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
     return respuesta;
 };

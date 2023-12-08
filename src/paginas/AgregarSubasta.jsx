@@ -5,15 +5,13 @@ import TablaProductoSubasta from "../componentes/TablaProductoSubasta";
 import servicioSubasta from "../servicios/shared/servicioSubasta";
 
 export default function AgregarSubasta() {
-
-    const [tipoS, setTipoSubasta] = React.useState("larga");
+    
     const[productosRevisar, setProductosRevisar]= React.useState([]);
     const[loading,setLoading]= React.useState(true);
+    const[productosAgregados, setProductosAgregados]= React.useState([]);
+    const[subasta, setSubasta]= React.useState({});
 
-    const tipoSubasta = (nuevoTipoSubasta) => {
-        setTipoSubasta(nuevoTipoSubasta);
-    };
-    
+   
     React.useEffect(()=>{
         Promise.all([servicioSubasta.consultarProductosNoAgregadosSubastas()])
         .then(([productosActuales])=>{
@@ -22,6 +20,17 @@ export default function AgregarSubasta() {
         .then(()=>setLoading(false));
     },[]);
 
+    const cambiarInfoSubasta = (key, value)=>{
+        setSubasta({
+            ...subasta,
+            [key]: value
+        });
+    }
+
+    const tipoSubasta = (nuevoTipoSubasta) => {
+        cambiarInfoSubasta("tipoSubasta",nuevoTipoSubasta);
+    };
+
     if(loading){
         return(
             <React.Fragment>
@@ -29,7 +38,22 @@ export default function AgregarSubasta() {
             </React.Fragment>
         );}
 
-    const agregarSubasta = (event) => {};
+    const agregarSubasta = (event) => {
+        event.preventDefault();
+        servicioSubasta.crearSubasta({
+            ...subasta,
+            estado:"PROGRAMADA",
+            productos: productosAgregados
+        }).then(respuesta => {
+            alert("Subasta creada con éxito");
+        }).catch(error => {
+            alert("Error al crear la subasta");            
+        }).finally(()=>{
+            setSubasta({});
+            setProductosAgregados([]);
+        });
+
+    };
     
     return(
         <React.Fragment>
@@ -39,28 +63,28 @@ export default function AgregarSubasta() {
             <form onSubmit={agregarSubasta}>
                 <div>
                     <label>Nombre:</label>
-                    <input type="text" name="nombre" id="nombre" required></input>
+                    <input type="text" name="nombre" id="nombre" onChange={(event)=>cambiarInfoSubasta(event.target.id,event.target.value)} required></input>
                 </div>
                 <div>
                     <label>Inicia el:</label>
-                    <input type="datetime-local" name="fechaInicio" id="fechaInicio" required></input>
+                    <input type="datetime-local" name="fechaInicio" id="fechaInicio" onChange={(event)=>cambiarInfoSubasta(event.target.id,event.target.value)} required></input>
                 </div>
                 <div>
                     <label>Finaliza el:</label>
-                    <input type="datetime-local" name="fechaFin" id="fechaFin" required></input>
+                    <input type="datetime-local" name="fechaFin" id="fechaFin" onChange={(event)=>cambiarInfoSubasta(event.target.id,event.target.value)} required></input>
                 </div>
 
                 <div>
                     <label>Tipo subasta:</label>
-                    <input type="radio" checked={tipoS === "larga"} value="larga" onChange={()=>tipoSubasta("larga")} required></input>
+                    <input type="radio" checked={subasta.tipoSubasta === "LARGA"} value="Larga" onChange={()=>tipoSubasta("LARGA")} required></input>
                     <label>Larga</label>
 
-                    <input type="radio" checked={tipoS === "corta"}  value="corta" onChange={()=>tipoSubasta("corta")} required></input>
+                    <input type="radio" checked={subasta.tipoSubasta === "CORTA"}  value="Corta" onChange={()=>tipoSubasta("CORTA")} required></input>
                     <label>Corta</label>
                 </div>
 
                 <div>
-                    <TablaProductoSubasta elemento={productosRevisar}/>
+                    <TablaProductoSubasta elemento={productosRevisar} productos={productosAgregados} agregarProducto={setProductosAgregados}/>
                 </div>
                 <div>
                     <button type="submit">Crear</button>
