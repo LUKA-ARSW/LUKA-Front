@@ -8,14 +8,23 @@ export default function Subastas() {
 
     const inscribirUsuarioASubasta = async (correo, subasta) => {
         let salaDeSubasta = await servicioSala.consultarSalasPorSubasta(subasta.nombre)
+        .then (respuesta =>{
+            if(typeof respuesta !== "object"){
+                throw new Error("No se pudo consultar la sala de subasta");
+            }
+            return respuesta;
+        })
         .catch(()=>null);
-
+       
         if(salaDeSubasta == null){
             const nuevaSala = {
                 nombre: `sala-${subasta.nombre}`,
                 subasta: subasta,
-                compradores: []
+                compradores: [],
+                elementoSubasta:[]
             };
+           
+            
             await servicioSala.crearSala(nuevaSala);
             salaDeSubasta = await servicioSala.consultarSalaPorNombre(nuevaSala.nombre);
         }

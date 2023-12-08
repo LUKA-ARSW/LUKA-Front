@@ -25,10 +25,24 @@ export default function SubastaLarga() {
     }
 
     React.useEffect(()=>{
-        salaServicios.consultarSalaPorNombre(idSala)
+        const inicializar = ()=>{
+            salaServicios.consultarSalaPorNombre(idSala)
+                .then((resultadoConsulta)=>{
+                    console.log(resultadoConsulta);
+                    return resultadoConsulta;
+                })
                 .then((resultadoConsulta)=>verificarSala(resultadoConsulta))
                 .then((resultadoConsulta)=>setSubastaInfo(resultadoConsulta))
                 .then(()=>setLoading(false));
+        };
+        inicializar();
+
+        
+        const idIntervalo = setInterval(()=>{
+            inicializar();
+        },
+        5000);
+        return ()=>clearInterval(idIntervalo);
                              
     },[]);
     
