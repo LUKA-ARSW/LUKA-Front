@@ -38,7 +38,7 @@ export default function SubastaLarga() {
         const idIntervalo = setInterval(()=>{
             inicializar();
         },
-        5000);
+        tiempo);
         return ()=>clearInterval(idIntervalo);
                              
     },[]);
