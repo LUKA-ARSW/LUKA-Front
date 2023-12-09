@@ -5,6 +5,8 @@ import {useParams} from "react-router-dom";
 import ProductoModal from "../componentes/ProductoModal";
 import salaServicios from "../servicios/shared/servicioSala";
 
+const tiempo = 4000;
+
 export default function SubastaCorta(){
     const [subastaInfo, setSubastaInfo] = React.useState({});
     const [loading, setLoading] = React.useState(true);
@@ -34,11 +36,21 @@ export default function SubastaCorta(){
         return resultadoConsulta;
     }
 
-    React.useEffect(()=>{
-        salaServicios.consultarSalaPorNombre(idSala)
+    const inicializar = async ()=>{
+        await salaServicios.consultarSalaPorNombre(idSala)
             .then((resultadoConsulta)=>verificarSala(resultadoConsulta))
             .then((resultadoConsulta)=>setSubastaInfo(resultadoConsulta))
-            .then(()=>setLoading(false));
+            .then(()=>setLoading(false)); 
+    };
+
+    React.useEffect(()=>{
+        inicializar();
+        const idIntervalo = setInterval(()=>{
+            inicializar();
+        },
+        tiempo);
+        return ()=>clearInterval(idIntervalo);
+
     },[]);
 
     if(loading){
@@ -62,7 +74,7 @@ export default function SubastaCorta(){
                 <button type="button" onClick={()=> llamarProducto(subastaInfo.elementoSubasta[0].producto.idProducto)}>Consultar</button>
             </div>
 
-            <MejoresPujas sala={idSala} informacion={subastaInfo.elementoSubasta[0]?.compradores} producto={subastaInfo.elementoSubasta[0]?.producto}/>
+            <MejoresPujas sala={idSala} informacion={subastaInfo.elementoSubasta[0]?.compradores} producto={subastaInfo.elementoSubasta[0]?.producto} onChange={inicializar}/>
 
             <ProductoModal estado={mostrarModal} cambiarEstado={setMostrarModal}>
                 <h1>{modalInfo.nombre}</h1>

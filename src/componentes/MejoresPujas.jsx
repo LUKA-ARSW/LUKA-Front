@@ -4,9 +4,9 @@ import salaServicios from "../servicios/shared/servicioSala";
 import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
 import servicioJwt from "../servicios/security/servicioJwt";
 
-export default function MejoresPujas({sala, informacion, producto}){
+export default function MejoresPujas({sala, informacion:compradoresActuales, producto, onChange}){
 
-    const [compradoresActuales, setCompradoresActuales] = React.useState(informacion??[]);
+    const[mejoresPujas, setMejoresPujas] = React.useState([]);
 
     const realizarPuja = ()=>{
         const puja = document.getElementById("pujar").value;
@@ -16,18 +16,15 @@ export default function MejoresPujas({sala, informacion, producto}){
             correo: infoUsuario.correo
         };
         salaServicios.pujarProducto(sala,comprador.correo,producto.idProducto,puja)
-            .then((respuesta)=>console.log(respuesta))
-            .then(()=>{
-                const compradoresTemp = [...compradoresActuales];
-                compradoresTemp.unshift(
-                    {
-                        first: comprador,
-                        second: puja
-                    }
-                );
-                setCompradoresActuales(compradoresTemp);
-            });
+            .then((respuesta)=>console.log(respuesta));
+        onChange();
     };
+
+    React.useEffect(()=>{
+        const mejoresPujasTemporales = compradoresActuales.slice(0,5).sort((a,b)=>b.second-a.second);
+        setMejoresPujas(mejoresPujasTemporales);
+          
+    },[compradoresActuales]);
 
     return(
         <React.Fragment>

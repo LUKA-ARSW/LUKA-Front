@@ -8,10 +8,10 @@ import servicioJwt from "../servicios/security/servicioJwt";
 import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
 
 
-export default function SubastaPaginador({numItems, elementos, nombreSala}) {
-    const [itemsGenerales, setItemsGenerales] = React.useState(elementos);
+export default function SubastaPaginador({numItems, elementos:itemsGenerales, nombreSala, onChange}) {
+    
     const [paginaActual, setPaginaActual] = React.useState(1);
-    const [elementosFranja, setElementosFranja] = React.useState(itemsGenerales.slice(paginaActual-1, paginaActual+numItems-1));
+    const [elementosFranja, setElementosFranja] = React.useState([]);
 
     const [mostrarModal, setMostrarModal] = React.useState(false);
     const [modalInfo, setModalInfo] = React.useState({});
@@ -20,6 +20,11 @@ export default function SubastaPaginador({numItems, elementos, nombreSala}) {
 
     const [modalPujarInfo, setModalPujarInfo] = React.useState("");
 
+    React.useEffect(()=>{
+        const  elementosTemporales = itemsGenerales.slice((paginaActual-1)*numItems, (paginaActual)*numItems);
+        setElementosFranja(elementosTemporales);
+
+    },[itemsGenerales, paginaActual]);
 
     const  llamarProducto = (idProducto)=>{
         const elementoSubastaInfo = elementosFranja.filter((elementoSubasta)=>elementoSubasta.producto.idProducto===idProducto)[0];
@@ -38,15 +43,12 @@ export default function SubastaPaginador({numItems, elementos, nombreSala}) {
         if(Math.ceil(itemsGenerales.length/numItems) < paginaActual+1){ return; }
         const paginaSiguiente= paginaActual+1;
         setPaginaActual(paginaSiguiente);
-        setElementosFranja(itemsGenerales.slice((paginaSiguiente-1)*numItems, (paginaSiguiente)*numItems));
-
     }
 
     const  cambiarPaginaAbajo = ()=>{
         if(paginaActual <= 1){ return; }
         const paginaAnterior= paginaActual-1;
         setPaginaActual(paginaAnterior);
-        setElementosFranja(itemsGenerales.slice((paginaAnterior-1)*numItems, (paginaAnterior)*numItems));
     }
 
     const realizarPuja = ()=>{
@@ -59,17 +61,8 @@ export default function SubastaPaginador({numItems, elementos, nombreSala}) {
         salaServicio.pujarProducto(nombreSala,comprador.correo,modalPujarInfo,puja)
             .then((respuesta)=>console.log(respuesta))
             .then(()=>setMostrarModalPujar(false))
-            .then(()=>setModalPujarInfo(""))
-            .then(()=>{
-                const elementosTemp = [...itemsGenerales];
-                const indice = elementosTemp.findIndex((elemento)=>elemento.producto.idProducto===modalPujarInfo);
-                elementosTemp[indice].pujaMaxima = puja;
-                elementosTemp[indice].compradores.unshift({
-                    first:comprador,
-                    second:puja
-                });
-                setItemsGenerales(elementosTemp);
-            });
+            .then(()=>setModalPujarInfo(""));
+        onChange();
     }
 
     return(

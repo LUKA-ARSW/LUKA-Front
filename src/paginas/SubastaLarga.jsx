@@ -4,6 +4,8 @@ import SubastaPaginador from "../componentes/SubastaPaginador";
 import { useParams } from "react-router-dom";
 import salaServicios from "../servicios/shared/servicioSala";
 
+const tiempo = 12000;
+
 export default function SubastaLarga() {
     const [subastaInfo, setSubastaInfo] = React.useState({});
     const [loading, setLoading] = React.useState(true);
@@ -24,11 +26,20 @@ export default function SubastaLarga() {
         return resultadoConsulta;
     }
 
+    const inicializar = async ()=>{
+        await salaServicios.consultarSalaPorNombre(idSala)
+            .then((resultadoConsulta)=>verificarSala(resultadoConsulta))
+            .then((resultadoConsulta)=>setSubastaInfo(()=>resultadoConsulta))
+            .then(()=>setLoading(false));
+    };
+
     React.useEffect(()=>{
-        salaServicios.consultarSalaPorNombre(idSala)
-                .then((resultadoConsulta)=>verificarSala(resultadoConsulta))
-                .then((resultadoConsulta)=>setSubastaInfo(resultadoConsulta))
-                .then(()=>setLoading(false));
+        inicializar();
+        const idIntervalo = setInterval(()=>{
+            inicializar();
+        },
+        tiempo);
+        return ()=>clearInterval(idIntervalo);
                              
     },[]);
     
@@ -48,7 +59,7 @@ export default function SubastaLarga() {
             <p>Termina el: {subastaInfo.subasta.fechaFin}</p>
             <p>Estado:{subastaInfo.subasta.estado}</p>
             <h1>Productos:</h1>
-            <SubastaPaginador numItems={3} elementos={subastaInfo.elementoSubasta} nombreSala={idSala}/>
+            <SubastaPaginador numItems={3} elementos={subastaInfo.elementoSubasta} nombreSala={idSala} onChange={inicializar}/>
         </React.Fragment>
     );
 
