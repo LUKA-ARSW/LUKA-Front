@@ -6,6 +6,8 @@ import servicioJwt from "../servicios/security/servicioJwt";
 
 export default function MejoresPujas({sala, informacion:compradoresActuales, producto, onChange}){
 
+    const[mejoresPujas, setMejoresPujas] = React.useState([]);
+
     const realizarPuja = ()=>{
         const puja = document.getElementById("pujar").value;
         const infoUsuario = servicioJwt.decryptToken(servicioLocalStorage.getValue("token"));
@@ -17,6 +19,12 @@ export default function MejoresPujas({sala, informacion:compradoresActuales, pro
             .then((respuesta)=>console.log(respuesta));
         onChange();
     };
+
+    React.useEffect(()=>{
+        const mejoresPujasTemporales = compradoresActuales.slice(0,5).sort((a,b)=>b.second-a.second);
+        setMejoresPujas(mejoresPujasTemporales);
+          
+    },[compradoresActuales]);
 
     return(
         <React.Fragment>
