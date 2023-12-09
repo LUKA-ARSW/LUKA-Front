@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js";
 
-const key = "12345678901234567890123456789012LD";
+const key = import.meta.env.VITE_SECRET_KEY;
 
 function encrypt(value){
     return CryptoJS.AES.encrypt(value, key).toString();

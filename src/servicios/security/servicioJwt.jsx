@@ -1,11 +1,10 @@
 import jwt from 'jsonwebtoken';
 
-const key = "KFLadinoBermudezDanielaLuisa0402";
+const key = import.meta.env.VITE_JWT_SECRET;
 
 function decryptToken(token) {
+  console.log(key);
   return jwt.verify(token, key);
-  //return jwt.verify(token, Buffer.from(key, "utf8").toString("base64"));
-  //return jwt.decode(token);
 }
 
 export default {
