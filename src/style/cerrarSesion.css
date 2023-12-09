@@ -1,0 +1,8 @@
+.cerrarSesion {
+    color: #000;
+    cursor: pointer;
+  }
+   
+  .cerrarSesion:hover {
+    color: #fff;
+  }
