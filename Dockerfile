@@ -10,9 +10,13 @@ COPY package*.json ./
 # Install app dependencies
 RUN npm install
 
+ENV VITE_JWT_SECRET=$VITE_JWT_SECRET\
+    VITE_SECRET_KEY=$VITE_SECRET_KEY\
+    VITE_BACKEND_HOST=$VITE_BACKEND_HOST\
+    VITE_BACKEND_PORT=$VITE_BACKEND_PORT
+
 # Copy the entire app directory into the container
 COPY . .
-
 
 EXPOSE $SERVER_PORT
 

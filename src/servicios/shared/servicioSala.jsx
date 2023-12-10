@@ -1,8 +1,9 @@
 import servicioAPI from '../web/servicioAPI';
 import servicioLocalStorage from '../web/servicioLocalStorage';
 
-const puerto=13000;
-const host=`http://localhost:${puerto}`;
+const puerto = import.meta.env.VITE_BACKEND_PORT;
+const host = import.meta.env.VITE_BACKEND_HOST;
+const socket = `${host}:${puerto}`;
 
 const cabecerasContenido= {
     'Content-Type': 'application/json'
@@ -15,38 +16,38 @@ const cabecerasAutorizacion= {
 async function crearSala(sala){
     const endPoint = '/sala';
     const body = JSON.stringify(sala);
-    const respuesta = await servicioAPI.doPost(endPoint, host, {...cabecerasContenido, ...cabecerasAutorizacion}, body);
+    const respuesta = await servicioAPI.doPost(endPoint, socket, {...cabecerasContenido, ...cabecerasAutorizacion}, body);
     return respuesta;
 };
 
 async function consultarSalaPorNombre(nombreSala){
     const endPoint = '/sala/'+nombreSala;    
-    const respuesta = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
+    const respuesta = await servicioAPI.doGet(endPoint, socket, cabecerasAutorizacion);
     return respuesta;
 };
 
 async function consultarSubastasPorUsuario(comprador, estado){
     const endPoint = '/sala/comprador/'+comprador +'?estado='+estado;    
-    const respuesta = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
+    const respuesta = await servicioAPI.doGet(endPoint, socket, cabecerasAutorizacion);
     return respuesta;
 };
 
 async function consultarSalasPorSubasta(idSubasta){
     const endPoint = '/sala/subasta/'+idSubasta;    
-    const respuesta = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
+    const respuesta = await servicioAPI.doGet(endPoint, socket, cabecerasAutorizacion);
     return respuesta;
 
 } 
 
 async function agregarUsuariosASala(nombreSala,correoUsuario){
     const endPoint = `/sala/${nombreSala}/${correoUsuario}`; 
-    const respuesta = await servicioAPI.doPost(endPoint, host, cabecerasAutorizacion);
+    const respuesta = await servicioAPI.doPost(endPoint, socket, cabecerasAutorizacion);
     return respuesta;
 };
 
 async function eliminarUsuarioDeSala(nombreSala,correoUsuario){
     const endPoint = `/sala/${nombreSala}/${correoUsuario}`; 
-    const respuesta = await servicioAPI.doDelete(endPoint, host, cabecerasAutorizacion);
+    const respuesta = await servicioAPI.doDelete(endPoint, socket, cabecerasAutorizacion);
     return respuesta;
 };
 
@@ -57,13 +58,13 @@ async function pujarProducto(nombreSala,comprador,idProducto,cantidadAPujar){
         'idProducto':idProducto,
         'cantidadAPujar':cantidadAPujar
     });          
-    const respuesta = await servicioAPI.doPatch(endPoint, host, {...cabecerasContenido, ...cabecerasAutorizacion},body);
+    const respuesta = await servicioAPI.doPatch(endPoint, socket, {...cabecerasContenido, ...cabecerasAutorizacion},body);
     return respuesta;
 };
 
 async function misSubastaProgramadas(idUsuario){
     const endPoint = '/sala';
-    const resultadoConsultar = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
+    const resultadoConsultar = await servicioAPI.doGet(endPoint, socket, cabecerasAutorizacion);
     return resultadoConsultar.filter((sala)=>sala.compradores.includes(idUsuario))
         .filter((salas)=>salas.subasta.estado==='PROGRAMADA')
         .map ((sala)=>sala.subasta);
@@ -71,7 +72,7 @@ async function misSubastaProgramadas(idUsuario){
 
 async function misSubastasEnCurso(idUsuario){
     const endPoint = '/sala';
-    const resultadoConsultar = await servicioAPI.doGet(endPoint, host, cabecerasAutorizacion);
+    const resultadoConsultar = await servicioAPI.doGet(endPoint, socket, cabecerasAutorizacion);
     return resultadoConsultar.filter((sala)=>sala.compradores.includes(idUsuario))
         .filter((salas)=>salas.subasta.estado==='EN_CURSO')
         .map ((sala)=>sala.subasta);
