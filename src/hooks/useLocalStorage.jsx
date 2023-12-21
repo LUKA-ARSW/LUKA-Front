@@ -1,37 +1,34 @@
-import React from "react";
+/* eslint-disable no-extra-semi */
+import { useEffect, useState } from "react";
+import useEncryption from "@hooks/useEncryption";
 
-export default function useLocalStorage(key, initialValue) {
-    const [storedValue, setStoredValue] = React.useState(() => {
-        try {
-            const item = window.localStorage.getItem(key);
-            return item ? JSON.parse(item) : initialValue;
-        }catch (error) {
-            console.log(error);
-            return initialValue;
-        }
-    });
+function useLocalStorage(key, initialValue) {
 
-    const setValue = (value) => {
+    const { encrypt, decrypt } = useEncryption(key);
+
+    const changeValue = () => {
+        let currentValue = initialValue;
         try {
-            const valueToStore = value instanceof Function ? value(storedValue) : value;
-            setStoredValue(valueToStore);
-            window.localStorage.setItem(key, JSON.stringify(valueToStore));
-        }catch (error) {
-            console.log(error);
+            let item = decrypt(window.localStorage.getItem(key));
+            currentValue = JSON.parse(item) ?? initialValue;
+        } catch (error) {
+            console.warn("Error al obtener el valor del localStorage ", error);
         }
+
+        return currentValue;
+
     };
 
-    const getValue = (key) => {
-        try {
-            const item = window.localStorage.getItem(key);
-            return item ? JSON.parse(item) : null;
-        }catch (error) {
-            console.log(error);
-            return null;
-        }
-    }
+    const update = () => {
+        const valueToStore = JSON.stringify(encrypt(value));
+        window.localStorage.setItem(key, valueToStore);
+    };
 
-    return [storedValue, setValue, getValue];
+    const [value, setValue] = useState(changeValue);
+    useEffect(update, [value, key, encrypt]);
 
+    return [value, setValue];
 
-}
+};
+
+export default useLocalStorage;
