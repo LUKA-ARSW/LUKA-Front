@@ -10,4 +10,15 @@ export default defineConfig({
     port: 14000,
   },
 
+  resolve: {
+    alias: {
+      '@*': '/src',
+      '@componentes': '/src/componentes',
+      '@paginas': '/src/paginas',
+      '@util': '/src/util',
+      '@img': '/src/img',
+      '@hooks': '/src/hooks'
+    },
+  }
+
 })
