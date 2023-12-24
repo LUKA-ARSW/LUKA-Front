@@ -6,7 +6,7 @@ function useJsonParser() {
     const simpleStringRegex = useMemo(() => new RegExp(/^[a-zA-Z0-9]+$/), []);
 
     const isJson = (json) => {
-        return !simpleStringRegex.test(json);
+        return !!json && !simpleStringRegex.test(json);
     };
 
     const parseJson = (json) => {

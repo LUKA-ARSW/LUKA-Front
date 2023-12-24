@@ -3,7 +3,8 @@ import useCryptoJs from "@hooks/useCryptoJs";
 
 function useEncryption(secretKey) {
 
-    const { cryptoJsEncrypt, cryptoJsDecrypt } = useCryptoJs(secretKey);
+    const { encrypt:cryptoJsEncrypt, 
+            decrypt:cryptoJsDecrypt } = useCryptoJs(secretKey);
 
     function encrypt(value){
         return cryptoJsEncrypt(value);

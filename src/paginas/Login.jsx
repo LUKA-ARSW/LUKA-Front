@@ -1,49 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import logo from "../img/LogoLUKA.png";
-import BannerSencillo from "../componentes/BannerSencillo";
-import servicioUsuario from "../servicios/shared/servicioUsuario";
-import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
-import servicioAutenticacion from "../servicios/security/servicioAutenticacion";
+import logo from "@img/LogoLUKA.png";
+import BannerSencillo from "@componentes/BannerSencillo";
+import servicioUsuario from "@servicios/shared/servicioUsuario";
+import useAuth from "@hooks/useAuth";
+import useLocalStorage from "@hooks/useLocalStorage";
 
 export default function Login() {
 
     const navegacion = useNavigate();
+    const { isAuthenticated: currentlyAuthenticated } = useAuth();
+    const { changeValue: setToken } = useLocalStorage("token", "");
+    const [ isAuthenticated, setIsAuthenticated ] = useState(currentlyAuthenticated);
 
     const login = (event) => {
         event.preventDefault();
+
+        const email = document.getElementById("correo").value;
+        const password = document.getElementById("contrasena").value;
         
-        if (document.getElementById("correo").value === "" || document.getElementById("contrasena").value === "") {
+        if (email === "" || password === "") {
             alert("Por favor ingrese todos los datos");
             return;
         }
 
-        const usuario = {
-            correo: document.getElementById("correo").value,
-            contrasena: document.getElementById("contrasena").value
-        };
-
-        servicioUsuario.login(usuario)
-            .then((respuesta) => {
-               servicioLocalStorage.setValue("token", respuesta);
-            })
-            .then(() => {
-                if (!servicioAutenticacion.usuarioAutenticado()) {
-                    throw new Error("No se pudo autenticar el usuario");
-                }
-                navegacion("/");
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        servicioUsuario.login({
+            correo: email, 
+            contrasena: password
+        })
+        .then((respuesta) => {
+            setToken(respuesta);
+            setIsAuthenticated(true);
+        })
+        .catch((error) => {
+            console.warn(error);
+        });
     };
 
     useEffect(() => {
-        if (servicioAutenticacion.usuarioAutenticado()) {
-            navegacion("/");
-        }
-    }, []);
+        if (isAuthenticated) { navegacion("/"); }
+    }, [isAuthenticated, navegacion]);
 
     return (
         <React.Fragment>

@@ -1,5 +1,5 @@
 /* eslint-disable no-extra-semi */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useJwt from '@hooks/useJwt';
 import useLocalStorage from '@hooks/useLocalStorage';
 
@@ -7,17 +7,26 @@ const secretKey = import.meta.env.VITE_SECRET_KEY;
 
 function useAuth() {
 
-    const [ isAuthenticated, setIsAuthenticated ] = useState(false);
-    const [ token ] = useLocalStorage('token', null);
-    const { decryptAuthToken } = useJwt(secretKey);
+    const { readValue: readAuthToken } = useLocalStorage('token', "");
+    const { decryptToken: decryptAuthToken } = useJwt(secretKey);
+    const checkAuthentication = useCallback(() => {
+        try {
+            return decryptAuthToken(readAuthToken()) != null;
+        } catch (error) {
+            return false;   
+        }
+    }, [readAuthToken, decryptAuthToken]);
+
+    const [ isAuthenticated, setIsAuthenticated ] = useState(checkAuthentication);
+    
 
     useEffect(() => {
-        const tokenDecrypted = decryptAuthToken(token);
-        setIsAuthenticated(tokenDecrypted != null);
-    }, [token, decryptAuthToken]);
+        setIsAuthenticated(checkAuthentication);
+    }, [checkAuthentication]);
 
-
-    return isAuthenticated;
+    return { 
+        isAuthenticated 
+    };
 
 };
 

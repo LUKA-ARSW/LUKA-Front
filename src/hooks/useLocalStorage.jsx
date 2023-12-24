@@ -1,33 +1,40 @@
 /* eslint-disable no-extra-semi */
-import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import useEncryption from "@hooks/useEncryption";
+import useJsonParser from "@hooks/useJsonParser";
+
+const secretKey = import.meta.env.VITE_SECRET_KEY;
 
 function useLocalStorage(key, initialValue) {
 
-    const { encrypt, decrypt } = useEncryption(key);
+    const { encrypt, decrypt } = useEncryption(secretKey);
+    const { parseJson } = useJsonParser();
 
-    const changeValue = () => {
-        let currentValue = initialValue;
+    const readValue = useCallback(() => {
+        let currentItem = initialValue;
         try {
-            let item = decrypt(window.localStorage.getItem(key));
-            currentValue = JSON.parse(item) ?? initialValue;
+            const item = decrypt(window.localStorage.getItem(key));
+            currentItem = parseJson(item) ?? initialValue;
         } catch (error) {
-            console.warn("Error al obtener el valor del localStorage ", error);
+            console.warn(`Error reading localStorage key “${key}”:`, error);
         }
 
-        return currentValue;
+        return currentItem;
+    }, [key, initialValue, decrypt, parseJson]);
 
+    const changeValue = (newValue) => {
+        try {
+            const valueToStore = encrypt(JSON.stringify(newValue));
+            window.localStorage.setItem(key, valueToStore);
+        } catch (error) {
+            console.warn(`Error setting localStorage key “${key}”:`, error);
+        }
     };
 
-    const update = () => {
-        const valueToStore = JSON.stringify(encrypt(value));
-        window.localStorage.setItem(key, valueToStore);
+    return {
+        readValue,
+        changeValue
     };
-
-    const [value, setValue] = useState(changeValue);
-    useEffect(update, [value, key, encrypt]);
-
-    return [value, setValue];
 
 };
 
