@@ -1,16 +1,24 @@
-import React from "react";
+import { useMemo, useState } from "react";
 
-import logo from "../img/LogoLUKA.png";
+import logo from "@img/LogoLUKA.png";
 
-import "../style/banner.css";
+import "@style/banner.css";
 import MenuPerfil from "./MenuPerfil";
-import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
-import servicioJwt from "../servicios/security/servicioJwt";
+import useLocalStorage from "@hooks/useLocalStorage";
+import useJwt from "@hooks/useJwt";
+
+const secretKey = import.meta.env.VITE_SECRET_KEY;
 
 export default function Banner() {
 
-    const userName = servicioJwt.decryptToken(servicioLocalStorage.getValue("token")).nombreUsuario;
-    const [menuAbierto, setMenuAbierto] = React.useState(false);
+    const { readValue } = useLocalStorage("token", "");
+    const { decryptToken } = useJwt(secretKey);
+    const [menuAbierto, setMenuAbierto] = useState(false);
+    
+    const userName = useMemo(() => {
+        const token = decryptToken(readValue());
+        return token.nombreUsuario;
+    }, [readValue, decryptToken]);
 
     const handleClick = () => {
         setMenuAbierto(!menuAbierto);
