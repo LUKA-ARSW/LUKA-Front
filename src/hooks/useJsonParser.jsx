@@ -1,17 +1,17 @@
 /* eslint-disable no-extra-semi */
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 function useJsonParser() {
 
     const simpleStringRegex = useMemo(() => new RegExp(/^[a-zA-Z0-9]+$/), []);
 
-    const isJson = (json) => {
+    const isJson = useCallback((json) => {
         return !!json && !simpleStringRegex.test(json);
-    };
+    }, [simpleStringRegex]);
 
-    const parseJson = (json) => {
+    const parseJson = useCallback((json) => {
         return isJson(json) ? JSON.parse(json) : json;
-    };
+    }, [isJson]);
 
     return { isJson, parseJson };
 

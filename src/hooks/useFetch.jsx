@@ -1,43 +1,50 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import useJsonParser from '@hooks/useJsonParser';
 
-function useFetch(url, body, headers, method='GET') {
+function useFetch(url, body, headers, method = 'GET') {
+
+    const { parseJson } = useJsonParser();
 
     const [response, setResponse] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [pending, setPending] = useState(true);
     const [error, setError] = useState(null);
-    const { parseJson } = useJsonParser();
-  
+    const doFetch = useCallback(async (signal) => {
+        setPending(true);
+        const options = () => {
+            const options = {
+                method,
+                headers,
+                signal
+            };
+
+            return (method !== 'GET') ? { ...options, body } : options;
+        };
+
+        try {
+            const data = await fetch(url, options());
+            if (!data.ok) throw new Error(data.statusText);
+
+            const response = await data.text();
+            const parsedResponse = parseJson(response);
+            setResponse(parsedResponse);
+            setError(null);
+        } catch (error) {
+            setError(error);
+            setResponse(null);
+        } finally {
+            setPending(false);
+        }
+    }, [url, body, headers, method, parseJson]);
 
     useEffect(() => {
         const abortController = new AbortController();
-        const signal = abortController.signal;
-
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url, {
-                    method: method,
-                    headers: headers,
-                    body: body,
-                    signal: signal
-                })
-                .then(resp => resp.text())
-                .then(data => parseJson(data));
-                setResponse(response);
-            } catch (error) {
-                setError(error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchData();
+        doFetch(abortController.signal);
 
         return () => abortController.abort();
-    }, [url, body, headers, method, parseJson]);
+    }, [doFetch]);
 
-    return { response, isLoading, error };
+    return { response, pending, error };
 
 }
 
