@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 
 import useFetch from '@hooks/useFetch';
 
-function useAPI() {
+function useApiCall() {
 
     const [url, setUrl] = useState("");
     const [body, setBody] = useState({});
@@ -22,4 +22,4 @@ function useAPI() {
 
 };
 
-export default useAPI;
+export default useApiCall;
