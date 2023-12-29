@@ -1,37 +1,41 @@
-import React from "react";
+/* eslint-disable no-extra-semi */
+import { useCallback } from "react";
+import useEncryption from "@hooks/useEncryption";
+import useJsonParser from "@hooks/useJsonParser";
 
-export default function useLocalStorage(key, initialValue) {
-    const [storedValue, setStoredValue] = React.useState(() => {
+const secretKey = import.meta.env.VITE_SECRET_KEY;
+
+function useLocalStorage(key, initialValue) {
+
+    const { encrypt, decrypt } = useEncryption(secretKey);
+    const { parseJson } = useJsonParser();
+
+    const readValue = useCallback(() => {
+        let currentItem = initialValue;
         try {
-            const item = window.localStorage.getItem(key);
-            return item ? JSON.parse(item) : initialValue;
-        }catch (error) {
-            console.log(error);
-            return initialValue;
+            const item = decrypt(window.localStorage.getItem(key));
+            currentItem = parseJson(item) ?? initialValue;
+        } catch (error) {
+            console.warn(`Error reading localStorage key “${key}”:`, error);
         }
-    });
 
-    const setValue = (value) => {
+        return currentItem;
+    }, [key, initialValue, decrypt, parseJson]);
+
+    const changeValue = (newValue) => {
         try {
-            const valueToStore = value instanceof Function ? value(storedValue) : value;
-            setStoredValue(valueToStore);
-            window.localStorage.setItem(key, JSON.stringify(valueToStore));
-        }catch (error) {
-            console.log(error);
+            const valueToStore = encrypt(JSON.stringify(newValue));
+            window.localStorage.setItem(key, valueToStore);
+        } catch (error) {
+            console.warn(`Error setting localStorage key “${key}”:`, error);
         }
     };
 
-    const getValue = (key) => {
-        try {
-            const item = window.localStorage.getItem(key);
-            return item ? JSON.parse(item) : null;
-        }catch (error) {
-            console.log(error);
-            return null;
-        }
-    }
+    return {
+        readValue,
+        changeValue
+    };
 
-    return [storedValue, setValue, getValue];
+};
 
-
-}
+export default useLocalStorage;

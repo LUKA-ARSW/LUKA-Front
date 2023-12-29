@@ -7,16 +7,16 @@ function getValue(key){
     }
     const decryptedValue = servicioEncriptado.decrypt(item);
     return decryptedValue;
-};
+}
 
 function setValue(key, value){
     const cryptedValue = servicioEncriptado.encrypt(value);
     window.localStorage.setItem(key, cryptedValue);
-};
+}
 
 function removeValue(key){
     window.localStorage.removeItem(key);
-};
+}
 
 export default {
     getValue,

@@ -1,7 +1,6 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 
-import SubastaInfo from "../paginas/SubastaInfo";
+import SubastaInfo from "@paginas/SubastaInfo";
 
 export default function AdaptadorSubastaInfo(){
     const {idSubasta} = useParams();
