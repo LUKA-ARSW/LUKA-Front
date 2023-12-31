@@ -1,7 +1,7 @@
 import React from "react";
-import Banner from "../componentes/Banner";
-import Menu from "../componentes/Menu";
-import TablaProductoSubasta from "../componentes/TablaProductoSubasta";
+import Banner from "@componentes/Banner";
+import Menu from "@componentes/Menu";
+import TablaProductoSubasta from "@componentes/TablaProductoSubasta";
 import servicioSubasta from "../servicios/shared/servicioSubasta";
 
 export default function AgregarSubasta() {
@@ -14,10 +14,8 @@ export default function AgregarSubasta() {
    
     React.useEffect(()=>{
         Promise.all([servicioSubasta.consultarProductosNoAgregadosSubastas()])
-        .then(([productosActuales])=>{
-            setProductosRevisar(productosActuales);
-        })
-        .then(()=>setLoading(false));
+            .then(([productosActuales])=>setProductosRevisar(productosActuales))
+            .then(()=>setLoading(false));
     },[]);
 
     const cambiarInfoSubasta = (key, value)=>{

@@ -20,6 +20,7 @@ export default defineConfig({
       '@hooks': '/src/hooks',
       '@style': '/src/style',
       '@servicios': '/src/servicios',
+      '@assets': '/src/assets'
     },
   }
 

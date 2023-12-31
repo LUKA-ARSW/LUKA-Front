@@ -1,25 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import CatalogoPaginador from "./CatalogoPaginador";
-import servicioProducto from "../servicios/shared/servicioProducto";
-import servicioJwt from "../servicios/security/servicioJwt";
-import servicioLocalStorage from "../servicios/web/servicioLocalStorage";
+import servicioProducto from "@servicios/shared/servicioProducto";
+import servicioJwt from "@servicios/security/servicioJwt";
+import servicioLocalStorage from "@servicios/web/servicioLocalStorage";
+
+import Catalogo from "@componentes/Catalogo";
+
 
 export default function MisProductos() {
-    const[productos, setProductos]= React.useState([]);
-    const[loading,setLoading]= React.useState(true);
+    const[productos, setProductos]= useState([]);
+    const[loading,setLoading]= useState(true);
     
-    React.useEffect(()=>{
+    useEffect(()=>{
         const infoUsuario = servicioJwt.decryptToken(servicioLocalStorage.getValue("token"));
         const vendedor = {
             correo: infoUsuario.correo
         };
         Promise.all([servicioProducto.consultarProductosPorVendedor(vendedor.correo)])
-        .then(([productosActuales])=>{
-            setProductos(productosActuales);
-        })
-        .then(()=>setLoading(false));
+            .then(([productosActuales])=>setProductos(productosActuales))
+            .then(()=>setLoading(false));
     },[]);
 
     if(loading){
@@ -32,14 +32,10 @@ export default function MisProductos() {
     return(
         <React.Fragment>
             <h1>Mis Productos</h1>
-            <div className="paginador">
-                <CatalogoPaginador numItems={3} elementos={productos}/>
-            </div>
-            <div>
-                <Link to={"/agregar-producto"}>
-                    <button type="button">Agregar</button>
-                </Link>
-            </div>
+            <Catalogo numItems={3} productos={productos}/>
+            <Link to={"/agregar-producto"}>
+                <button type="button">Agregar</button>
+            </Link>
         </React.Fragment>
     );
 };
