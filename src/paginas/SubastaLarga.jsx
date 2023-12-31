@@ -1,8 +1,8 @@
 import React from "react";
-
-import SubastaPaginador from "../componentes/SubastaPaginador";
 import { useParams } from "react-router-dom";
-import salaServicios from "../servicios/shared/servicioSala";
+
+import salaServicios from "@servicios/shared/servicioSala";
+import SubastaProductos from "@componentes/SubastaPaginador";
 
 const tiempo = 12000;
 
@@ -59,7 +59,7 @@ export default function SubastaLarga() {
             <p>Termina el: {subastaInfo.subasta.fechaFin}</p>
             <p>Estado:{subastaInfo.subasta.estado}</p>
             <h1>Productos:</h1>
-            <SubastaPaginador numItems={3} elementos={subastaInfo.elementoSubasta} nombreSala={idSala} onChange={inicializar}/>
+            <SubastaProductos numItems={3} elementos={subastaInfo.elementoSubasta} nombreSala={idSala} onChange={inicializar}/>
         </React.Fragment>
     );
 

@@ -1,18 +1,17 @@
-import React from "react";
+/* eslint-disable no-extra-semi */
+import React, { useState, useEffect } from "react";
 
-import CatalogoPaginador from "./CatalogoPaginador";
 import servicioProducto from "../servicios/shared/servicioProducto";
+import Catalogo from "./Catalogo";
 
 export default function Productos() {
-    const[productos, setProductos]= React.useState([]);
-    const[loading,setLoading]= React.useState(true);
+    const [ productos, setProductos ]= useState([]);
+    const [ loading, setLoading ]= useState(true);
     
-    React.useEffect(()=>{
+    useEffect(()=>{
         Promise.all([servicioProducto.consultarTodosProductos()])
-        .then(([productosActuales])=>{
-            setProductos(productosActuales);
-        })
-        .then(()=>setLoading(false));
+            .then(([productosActuales])=>setProductos(productosActuales))
+            .then(()=>setLoading(false));
     },[]);
 
     if(loading){
@@ -25,9 +24,7 @@ export default function Productos() {
     return(
         <React.Fragment>
             <h1>Productos</h1>
-            <div className="paginador">
-                <CatalogoPaginador numItems={3} elementos={productos}/>
-            </div>
+            <Catalogo productos={productos}/>
         </React.Fragment>
     );
 };
